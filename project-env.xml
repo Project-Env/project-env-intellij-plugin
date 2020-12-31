@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-env xmlns="ch.repolevedavaj.projectenv"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="ch.repolevedavaj.projectenv project-env.xsd">
+    <tools>
+        <directory>.tools</directory>
+        <installers>
+            <jdk>
+                <name>jdk</name>
+                <download-uris>
+                    <macos>https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.0/graalvm-ce-java11-darwin-amd64-20.3.0.tar.gz</macos>
+                </download-uris>
+            </jdk>
+            <maven>
+                <name>maven</name>
+                <download-uris>
+                    <system-independent>https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz</system-independent>
+                </download-uris>
+            </maven>
+        </installers>
+    </tools>
+    <shell-integration>
+        <profile>.project-env</profile>
+    </shell-integration>
+</project-env>

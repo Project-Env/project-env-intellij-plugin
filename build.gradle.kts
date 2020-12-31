@@ -38,11 +38,13 @@ version = pluginVersion
 
 // Configure project's dependencies
 repositories {
+    mavenLocal()
     mavenCentral()
     jcenter()
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
+    implementation("ch.repolevedavaj.projectenv:core:1.0.0")
 }
 
 // Configure gradle-intellij-plugin plugin.

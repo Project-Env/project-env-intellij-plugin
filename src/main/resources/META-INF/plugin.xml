@@ -1,19 +1,21 @@
 <idea-plugin>
-    <id>com.github.repolevedavaj.projectenvintellijplugin</id>
-    <name>project-env-intellij-plugin</name>
+    <id>ch.repolevedavaj.projectenv.intellijplugin</id>
+    <name>Project-Env</name>
     <vendor>repolevedavaj</vendor>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.repolevedavaj.projectenvintellijplugin.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.repolevedavaj.projectenvintellijplugin.services.MyProjectService"/>
-    </extensions>
+    <depends>com.intellij.java</depends>
+    <depends>NodeJS</depends>
 
     <applicationListeners>
-        <listener class="com.github.repolevedavaj.projectenvintellijplugin.listeners.MyProjectManagerListener"
+        <listener class="ch.repolevedavaj.projectenv.intellijplugin.listeners.ProjectEnvInitializer"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="Project-Env" displayType="BALLOON"/>
+    </extensions>
+
 </idea-plugin>
