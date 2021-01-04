@@ -41,10 +41,13 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
+    maven {
+        url = uri("https://dl.bintray.com/project-env/maven-repo")
+    }
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
-    implementation("ch.repolevedavaj.projectenv:core:1.0.0")
+    implementation("ch.repolevedavaj.projectenv:core:0.0.9")
 }
 
 // Configure gradle-intellij-plugin plugin.
