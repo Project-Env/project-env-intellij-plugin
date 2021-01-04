@@ -1,21 +1,32 @@
 <idea-plugin>
+
     <id>ch.repolevedavaj.projectenv.intellijplugin</id>
     <name>Project-Env</name>
     <vendor>repolevedavaj</vendor>
 
-    <!-- Product and plugin compatibility requirements -->
-    <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.java</depends>
-    <depends>NodeJS</depends>
+
+    <extensionPoints>
+        <extensionPoint name="toolConfigurer"
+                        interface="ch.repolevedavaj.projectenv.intellijplugin.configurers.ToolConfigurer"
+                        dynamic="true"
+                        area="IDEA_PROJECT"/>
+    </extensionPoints>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <projectService
+                serviceInterface="ch.repolevedavaj.projectenv.intellijplugin.services.ExecutionEnvironmentService"
+                serviceImplementation="ch.repolevedavaj.projectenv.intellijplugin.services.impl.ExecutionEnvironmentServiceImpl"/>
+    </extensions>
 
     <applicationListeners>
-        <listener class="ch.repolevedavaj.projectenv.intellijplugin.listeners.ProjectEnvInitializer"
+        <listener class="ch.repolevedavaj.projectenv.intellijplugin.ProjectEnvInitializer"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <notificationGroup id="Project-Env" displayType="BALLOON"/>
-    </extensions>
+    <depends optional="true" config-file="plugin-jdk.xml">com.intellij.java</depends>
+    <depends optional="true" config-file="plugin-maven.xml">org.jetbrains.idea.maven</depends>
+    <depends optional="true" config-file="plugin-gradle.xml">com.intellij.gradle</depends>
+    <depends optional="true" config-file="plugin-node.xml">NodeJS</depends>
 
 </idea-plugin>

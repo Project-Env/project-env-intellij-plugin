@@ -1,0 +1,8 @@
+<idea-plugin>
+
+    <extensions defaultExtensionNs="ch.repolevedavaj.projectenv.intellijplugin">
+        <toolConfigurer
+                implementation="ch.repolevedavaj.projectenv.intellijplugin.configurers.jdk.JdkConfigurer"/>
+    </extensions>
+
+</idea-plugin>

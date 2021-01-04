@@ -1,0 +1,15 @@
+<idea-plugin>
+
+    <depends>com.intellij.modules.externalSystem</depends>
+
+    <extensions defaultExtensionNs="ch.repolevedavaj.projectenv.intellijplugin">
+        <toolConfigurer
+                implementation="ch.repolevedavaj.projectenv.intellijplugin.configurers.gradle.GradleConfigurer"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij.externalSystem">
+        <runConfigurationExtension
+                implementation="ch.repolevedavaj.projectenv.intellijplugin.configurers.gradle.GradleRunConfigurationExtension"/>
+    </extensions>
+
+</idea-plugin>
