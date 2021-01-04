@@ -9,5 +9,4 @@ interface ExecutionEnvironmentService {
     fun registerPathElement(pathElement: File)
 
     fun createEnvironment(): Map<String, String>
-
 }

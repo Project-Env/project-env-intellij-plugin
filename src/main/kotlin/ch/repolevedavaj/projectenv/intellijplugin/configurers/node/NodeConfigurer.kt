@@ -45,6 +45,4 @@ class NodeConfigurer(val project: Project) : ToolConfigurer {
 
         throw IllegalStateException()
     }
-
-
 }

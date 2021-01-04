@@ -18,7 +18,7 @@ class JdkConfigurer(val project: Project) : ToolConfigurer {
     override fun configureTool(toolDetails: ProjectToolDetails) {
         ApplicationManager.getApplication().runWriteAction {
             val jdkName = createJdkName()
-            removeOldJdk(jdkName);
+            removeOldJdk(jdkName)
             createNewJdk(toolDetails, jdkName)
         }
     }
@@ -39,5 +39,4 @@ class JdkConfigurer(val project: Project) : ToolConfigurer {
         ProjectJdkTable.getInstance().addJdk(newJdk)
         ProjectRootManager.getInstance(project).projectSdk = newJdk
     }
-
 }

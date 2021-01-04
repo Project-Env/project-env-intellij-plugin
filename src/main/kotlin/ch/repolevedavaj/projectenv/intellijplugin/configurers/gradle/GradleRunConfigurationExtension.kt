@@ -44,5 +44,4 @@ class GradleRunConfigurationExtension : ExternalSystemRunConfigurationExtension 
     ) {
         // noop
     }
-
 }

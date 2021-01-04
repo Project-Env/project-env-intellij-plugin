@@ -17,18 +17,17 @@ class ExecutionEnvironmentServiceImpl : ExecutionEnvironmentService {
     }
 
     override fun createEnvironment(): Map<String, String> {
-        val environment = HashMap<String, String>();
-        environment.putAll(exports);
-        environment.put("PATH", createPathVariableValue());
+        val environment = HashMap<String, String>()
+        environment.putAll(exports)
+        environment.put("PATH", createPathVariableValue())
 
-        return environment;
+        return environment
     }
 
     private fun createPathVariableValue(): String {
         val pathExtension = pathElements.joinToString(":")
         val pathBase = System.getenv("PATH")
 
-        return "${pathExtension}:${pathBase}"
+        return "$pathExtension:$pathBase"
     }
-
 }

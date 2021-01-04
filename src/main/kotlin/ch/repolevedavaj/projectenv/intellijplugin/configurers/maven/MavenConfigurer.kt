@@ -20,9 +20,8 @@ class MavenConfigurer(val project: Project) : ToolConfigurer {
         ApplicationManager.getApplication().runWriteAction {
             MavenProjectsManager.getInstance(project).generalSettings.mavenHome = toolDetails.location.canonicalPath
 
-            val environment = project.service<ExecutionEnvironmentService>().createEnvironment();
+            val environment = project.service<ExecutionEnvironmentService>().createEnvironment()
             MavenRunner.getInstance(project).settings.environmentProperties.putAll(environment)
         }
     }
-
 }
