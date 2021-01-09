@@ -19,12 +19,14 @@ class ProjectEnvInitializer : ProjectManagerListener {
 
     override fun projectOpened(project: Project) {
         val configurationFile = File(project.basePath, "project-env.xml")
-        val projectEnvConfiguration: ProjectEnv = ConfigurationFactory.createFromFile(configurationFile)
+        if (configurationFile.exists()) {
+            val projectEnvConfiguration: ProjectEnv = ConfigurationFactory.createFromFile(configurationFile)
 
-        val toolsDirectory = getToolsDirectory(project, projectEnvConfiguration)
-        val toolDetailsList = installTools(projectEnvConfiguration, toolsDirectory)
-        configureExecutionEnvironment(project, toolDetailsList)
-        configureTools(project, toolDetailsList)
+            val toolsDirectory = getToolsDirectory(project, projectEnvConfiguration)
+            val toolDetailsList = installTools(projectEnvConfiguration, toolsDirectory)
+            configureExecutionEnvironment(project, toolDetailsList)
+            configureTools(project, toolDetailsList)
+        }
     }
 
     private fun getToolsDirectory(project: Project, projectEnvConfiguration: ProjectEnv): File {
