@@ -1,25 +1,23 @@
 package ch.repolevedavaj.projectenv.intellijplugin.configurers.node
 
-import ch.repolevedavaj.projectenv.core.ProjectToolDetails
-import ch.repolevedavaj.projectenv.core.ProjectToolType
+import ch.projectenv.core.toolinfo.NodeInfo
+import ch.projectenv.core.toolinfo.ToolInfo
 import ch.repolevedavaj.projectenv.intellijplugin.configurers.ToolConfigurer
 import com.intellij.javascript.nodejs.interpreter.NodeJsInterpreterManager
 import com.intellij.javascript.nodejs.interpreter.local.NodeJsLocalInterpreter
 import com.intellij.javascript.nodejs.interpreter.local.NodeJsLocalInterpreterManager
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.SystemInfo
-import java.io.File
 
-class NodeConfigurer(val project: Project) : ToolConfigurer {
+class NodeConfigurer(val project: Project) : ToolConfigurer<NodeInfo> {
 
-    override fun supportsType(type: ProjectToolType): Boolean {
-        return type == ProjectToolType.NODE
+    override fun supportsType(toolInfo: ToolInfo): Boolean {
+        return toolInfo is NodeInfo
     }
 
-    override fun configureTool(toolDetails: ProjectToolDetails) {
+    override fun configureTool(toolInfo: NodeInfo) {
         ApplicationManager.getApplication().runWriteAction {
-            val interpreter = NodeJsLocalInterpreter(getNodeExecutablePath(toolDetails).canonicalPath)
+            val interpreter = NodeJsLocalInterpreter(toolInfo.primaryExecutable.get().canonicalPath)
 
             NodeJsLocalInterpreterManager.getInstance().interpreters.stream().filter { existingInterpreter ->
                 interpreter.interpreterSystemDependentPath == existingInterpreter.interpreterSystemDependentPath
@@ -34,15 +32,4 @@ class NodeConfigurer(val project: Project) : ToolConfigurer {
         }
     }
 
-    fun getNodeExecutablePath(nodeDetails: ProjectToolDetails): File {
-        val executableName = if (SystemInfo.isWindows) "node.exe" else "node"
-        for (pathElement in nodeDetails.pathElements) {
-            val candidate = File(pathElement, executableName)
-            if (candidate.exists()) {
-                return candidate
-            }
-        }
-
-        throw IllegalStateException()
-    }
 }

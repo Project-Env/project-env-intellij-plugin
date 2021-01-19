@@ -1,14 +1,13 @@
 package ch.repolevedavaj.projectenv.intellijplugin.configurers
 
-import ch.repolevedavaj.projectenv.core.ProjectToolDetails
-import ch.repolevedavaj.projectenv.core.ProjectToolType
+import ch.projectenv.core.toolinfo.ToolInfo
 import com.intellij.openapi.Disposable
 
-interface ToolConfigurer : Disposable {
+interface ToolConfigurer<ToolInfoType : ToolInfo> : Disposable {
 
-    fun supportsType(type: ProjectToolType): Boolean
+    fun supportsType(toolInfo: ToolInfo): Boolean
 
-    fun configureTool(toolDetails: ProjectToolDetails)
+    fun configureTool(toolInfo: ToolInfoType)
 
     override fun dispose() {
         // noop

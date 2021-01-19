@@ -1,7 +1,7 @@
 package ch.repolevedavaj.projectenv.intellijplugin.configurers.jdk
 
-import ch.repolevedavaj.projectenv.core.ProjectToolDetails
-import ch.repolevedavaj.projectenv.core.ProjectToolType
+import ch.projectenv.core.toolinfo.JdkInfo
+import ch.projectenv.core.toolinfo.ToolInfo
 import ch.repolevedavaj.projectenv.intellijplugin.configurers.ToolConfigurer
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
@@ -9,17 +9,17 @@ import com.intellij.openapi.projectRoots.JavaSdk
 import com.intellij.openapi.projectRoots.ProjectJdkTable
 import com.intellij.openapi.roots.ProjectRootManager
 
-class JdkConfigurer(val project: Project) : ToolConfigurer {
+class JdkConfigurer(val project: Project) : ToolConfigurer<JdkInfo> {
 
-    override fun supportsType(type: ProjectToolType): Boolean {
-        return type == ProjectToolType.JDK
+    override fun supportsType(toolInfo: ToolInfo): Boolean {
+        return toolInfo is JdkInfo
     }
 
-    override fun configureTool(toolDetails: ProjectToolDetails) {
+    override fun configureTool(toolInfo: JdkInfo) {
         ApplicationManager.getApplication().runWriteAction {
             val jdkName = createJdkName()
             removeOldJdk(jdkName)
-            createNewJdk(toolDetails, jdkName)
+            createNewJdk(toolInfo, jdkName)
         }
     }
 
@@ -34,8 +34,8 @@ class JdkConfigurer(val project: Project) : ToolConfigurer {
         }
     }
 
-    private fun createNewJdk(toolDetails: ProjectToolDetails, jdkName: String) {
-        val newJdk = JavaSdk.getInstance().createJdk(jdkName, toolDetails.location.canonicalPath)
+    private fun createNewJdk(toolInfo: JdkInfo, jdkName: String) {
+        val newJdk = JavaSdk.getInstance().createJdk(jdkName, toolInfo.location.canonicalPath)
         ProjectJdkTable.getInstance().addJdk(newJdk)
         ProjectRootManager.getInstance(project).projectSdk = newJdk
     }

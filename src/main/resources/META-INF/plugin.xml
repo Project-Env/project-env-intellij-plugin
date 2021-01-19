@@ -17,6 +17,9 @@
         <projectService
                 serviceInterface="ch.repolevedavaj.projectenv.intellijplugin.services.ExecutionEnvironmentService"
                 serviceImplementation="ch.repolevedavaj.projectenv.intellijplugin.services.impl.ExecutionEnvironmentServiceImpl"/>
+        <projectService
+                serviceInterface="ch.repolevedavaj.projectenv.intellijplugin.services.ProjectEnvService"
+                serviceImplementation="ch.repolevedavaj.projectenv.intellijplugin.services.impl.ProjectEnvServiceImpl"/>
     </extensions>
 
     <applicationListeners>

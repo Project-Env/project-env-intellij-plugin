@@ -43,7 +43,7 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.repolevedavaj.projectenv:core:0.0.11")
+    implementation("ch.projectenv:core:0.0.18")
 }
 
 // Configure gradle-intellij-plugin plugin.
