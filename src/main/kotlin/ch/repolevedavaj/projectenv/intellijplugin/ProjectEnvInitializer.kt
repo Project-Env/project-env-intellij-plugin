@@ -10,5 +10,4 @@ class ProjectEnvInitializer : ProjectManagerListener {
     override fun projectOpened(project: Project) {
         project.service<ProjectEnvService>().refreshProjectEnv()
     }
-
 }

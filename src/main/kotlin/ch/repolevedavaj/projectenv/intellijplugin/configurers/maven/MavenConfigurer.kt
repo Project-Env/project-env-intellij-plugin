@@ -29,5 +29,4 @@ class MavenConfigurer(val project: Project) : ToolConfigurer<MavenInfo> {
             MavenRunner.getInstance(project).settings.environmentProperties.putAll(environment)
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package ch.repolevedavaj.projectenv.intellijplugin.services.impl
 
-
 import ch.projectenv.core.configuration.ProjectEnvConfiguration
 import ch.projectenv.core.configuration.ProjectEnvConfigurationFactory
 import ch.projectenv.core.installer.ToolInstallers
@@ -59,5 +58,4 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
             }
         }
     }
-
 }

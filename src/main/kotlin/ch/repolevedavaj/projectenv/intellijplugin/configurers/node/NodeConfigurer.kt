@@ -31,5 +31,4 @@ class NodeConfigurer(val project: Project) : ToolConfigurer<NodeInfo> {
             NodeJsInterpreterManager.getInstance(project).setInterpreterRef(interpreter.toRef())
         }
     }
-
 }
