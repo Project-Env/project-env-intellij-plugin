@@ -14,7 +14,8 @@
 ### Fixed
 
 ### Security
-## [unspecified]
+
+## [1.0.0]
 ### Changed
 - Changed plugin namespace from `ch.repolevedavaj.projectenv` to `io.projectenv`
 - Updated Project-Env core library to version `1.0.0` (does not really change anything - just changed the package name to `io.projectenv`)
