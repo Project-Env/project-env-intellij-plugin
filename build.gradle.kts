@@ -43,7 +43,7 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.projectenv:core:0.0.18")
+    implementation("io.projectenv:core:1.0.0")
 }
 
 // Configure gradle-intellij-plugin plugin.

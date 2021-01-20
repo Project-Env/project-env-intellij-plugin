@@ -1,7 +1,7 @@
-package ch.repolevedavaj.projectenv.intellijplugin.configurers
+package io.projectenv.intellijplugin.configurers
 
-import ch.projectenv.core.toolinfo.ToolInfo
 import com.intellij.openapi.Disposable
+import io.projectenv.core.toolinfo.ToolInfo
 
 interface ToolConfigurer<ToolInfoType : ToolInfo> : Disposable {
 

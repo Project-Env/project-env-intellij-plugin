@@ -1,21 +1,21 @@
-package ch.repolevedavaj.projectenv.intellijplugin.services.impl
+package io.projectenv.intellijplugin.services.impl
 
-import ch.projectenv.core.configuration.ProjectEnvConfiguration
-import ch.projectenv.core.configuration.ProjectEnvConfigurationFactory
-import ch.projectenv.core.installer.ToolInstallers
-import ch.projectenv.core.toolinfo.ToolInfo
-import ch.repolevedavaj.projectenv.intellijplugin.configurers.ToolConfigurer
-import ch.repolevedavaj.projectenv.intellijplugin.services.ExecutionEnvironmentService
-import ch.repolevedavaj.projectenv.intellijplugin.services.ProjectEnvService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.extensions.ProjectExtensionPointName
 import com.intellij.openapi.project.Project
+import io.projectenv.core.configuration.ProjectEnvConfiguration
+import io.projectenv.core.configuration.ProjectEnvConfigurationFactory
+import io.projectenv.core.installer.ToolInstallers
+import io.projectenv.core.toolinfo.ToolInfo
+import io.projectenv.intellijplugin.configurers.ToolConfigurer
+import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
+import io.projectenv.intellijplugin.services.ProjectEnvService
 import java.io.File
 
 class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
 
     private val TOOL_CONFIGURER_EXTENSION_POINT_NAME: ProjectExtensionPointName<ToolConfigurer<ToolInfo>> =
-        ProjectExtensionPointName("ch.repolevedavaj.projectenv.intellijplugin.toolConfigurer")
+        ProjectExtensionPointName("io.projectenv.intellijplugin.toolConfigurer")
 
     override fun refreshProjectEnv() {
         val configurationFile = File(project.basePath, "project-env.yml")

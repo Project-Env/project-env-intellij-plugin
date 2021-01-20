@@ -1,13 +1,13 @@
-package ch.repolevedavaj.projectenv.intellijplugin.configurers.jdk
+package io.projectenv.intellijplugin.configurers.jdk
 
-import ch.projectenv.core.toolinfo.JdkInfo
-import ch.projectenv.core.toolinfo.ToolInfo
-import ch.repolevedavaj.projectenv.intellijplugin.configurers.ToolConfigurer
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.projectRoots.JavaSdk
 import com.intellij.openapi.projectRoots.ProjectJdkTable
 import com.intellij.openapi.roots.ProjectRootManager
+import io.projectenv.core.toolinfo.JdkInfo
+import io.projectenv.core.toolinfo.ToolInfo
+import io.projectenv.intellijplugin.configurers.ToolConfigurer
 
 class JdkConfigurer(val project: Project) : ToolConfigurer<JdkInfo> {
 

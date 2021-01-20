@@ -1,6 +1,6 @@
-package ch.repolevedavaj.projectenv.intellijplugin.services.impl
+package io.projectenv.intellijplugin.services.impl
 
-import ch.repolevedavaj.projectenv.intellijplugin.services.ExecutionEnvironmentService
+import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import java.io.File
 
 class ExecutionEnvironmentServiceImpl : ExecutionEnvironmentService {

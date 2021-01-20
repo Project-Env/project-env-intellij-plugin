@@ -1,4 +1,4 @@
-package ch.repolevedavaj.projectenv.intellijplugin.services
+package io.projectenv.intellijplugin.services
 
 interface ProjectEnvService {
 

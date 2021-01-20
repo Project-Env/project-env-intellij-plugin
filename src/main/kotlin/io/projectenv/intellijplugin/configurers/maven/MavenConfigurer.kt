@@ -1,12 +1,12 @@
-package ch.repolevedavaj.projectenv.intellijplugin.configurers.maven
+package io.projectenv.intellijplugin.configurers.maven
 
-import ch.projectenv.core.toolinfo.MavenInfo
-import ch.projectenv.core.toolinfo.ToolInfo
-import ch.repolevedavaj.projectenv.intellijplugin.configurers.ToolConfigurer
-import ch.repolevedavaj.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
+import io.projectenv.core.toolinfo.MavenInfo
+import io.projectenv.core.toolinfo.ToolInfo
+import io.projectenv.intellijplugin.configurers.ToolConfigurer
+import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import org.jetbrains.idea.maven.execution.MavenRunner
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 

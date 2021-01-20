@@ -1,8 +1,8 @@
 <idea-plugin>
 
-    <extensions defaultExtensionNs="ch.repolevedavaj.projectenv.intellijplugin">
+    <extensions defaultExtensionNs="io.projectenv.intellijplugin">
         <toolConfigurer
-                implementation="ch.repolevedavaj.projectenv.intellijplugin.configurers.node.NodeConfigurer"/>
+                implementation="io.projectenv.intellijplugin.configurers.node.NodeConfigurer"/>
     </extensions>
 
 </idea-plugin>

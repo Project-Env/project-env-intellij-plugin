@@ -8,22 +8,22 @@
 
     <extensionPoints>
         <extensionPoint name="toolConfigurer"
-                        interface="ch.repolevedavaj.projectenv.intellijplugin.configurers.ToolConfigurer"
+                        interface="io.projectenv.intellijplugin.configurers.ToolConfigurer"
                         dynamic="true"
                         area="IDEA_PROJECT"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
         <projectService
-                serviceInterface="ch.repolevedavaj.projectenv.intellijplugin.services.ExecutionEnvironmentService"
-                serviceImplementation="ch.repolevedavaj.projectenv.intellijplugin.services.impl.ExecutionEnvironmentServiceImpl"/>
+                serviceInterface="io.projectenv.intellijplugin.services.ExecutionEnvironmentService"
+                serviceImplementation="io.projectenv.intellijplugin.services.impl.ExecutionEnvironmentServiceImpl"/>
         <projectService
-                serviceInterface="ch.repolevedavaj.projectenv.intellijplugin.services.ProjectEnvService"
-                serviceImplementation="ch.repolevedavaj.projectenv.intellijplugin.services.impl.ProjectEnvServiceImpl"/>
+                serviceInterface="io.projectenv.intellijplugin.services.ProjectEnvService"
+                serviceImplementation="io.projectenv.intellijplugin.services.impl.ProjectEnvServiceImpl"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="ch.repolevedavaj.projectenv.intellijplugin.ProjectEnvInitializer"
+        <listener class="io.projectenv.intellijplugin.ProjectEnvInitializer"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 

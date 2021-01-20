@@ -1,6 +1,5 @@
-package ch.repolevedavaj.projectenv.intellijplugin.configurers.gradle
+package io.projectenv.intellijplugin.configurers.gradle
 
-import ch.repolevedavaj.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.RunnerSettings
 import com.intellij.execution.configurations.SimpleJavaParameters
@@ -9,6 +8,7 @@ import com.intellij.openapi.externalSystem.service.execution.ExternalSystemProce
 import com.intellij.openapi.externalSystem.service.execution.ExternalSystemRunConfiguration
 import com.intellij.openapi.externalSystem.service.execution.ExternalSystemRunConfigurationExtension
 import com.intellij.openapi.options.SettingsEditorGroup
+import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import org.jdom.Element
 
 class GradleRunConfigurationExtension : ExternalSystemRunConfigurationExtension {

@@ -1,10 +1,10 @@
-package ch.repolevedavaj.projectenv.intellijplugin.configurers.gradle
+package io.projectenv.intellijplugin.configurers.gradle
 
-import ch.projectenv.core.toolinfo.GradleInfo
-import ch.projectenv.core.toolinfo.ToolInfo
-import ch.repolevedavaj.projectenv.intellijplugin.configurers.ToolConfigurer
 import com.intellij.openapi.externalSystem.settings.ExternalSystemSettingsListenerAdapter
 import com.intellij.openapi.project.Project
+import io.projectenv.core.toolinfo.GradleInfo
+import io.projectenv.core.toolinfo.ToolInfo
+import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import org.jetbrains.plugins.gradle.settings.DistributionType
 import org.jetbrains.plugins.gradle.settings.GradleProjectSettings
 import org.jetbrains.plugins.gradle.settings.GradleSettings
