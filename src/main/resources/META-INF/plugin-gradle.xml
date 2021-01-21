@@ -2,7 +2,7 @@
 
     <depends>com.intellij.modules.externalSystem</depends>
 
-    <extensions defaultExtensionNs="io.projectenv.intellijplugin">
+    <extensions defaultExtensionNs="ch.repolevedavaj.projectenv.intellijplugin">
         <toolConfigurer
                 implementation="io.projectenv.intellijplugin.configurers.gradle.GradleConfigurer"/>
     </extensions>

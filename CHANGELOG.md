@@ -3,17 +3,8 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
-
-### Security
+- Fixed the namespace of the `toolConfigurer` plugin extension point which is used to handle tool specific configuration tasks.
 
 ## [1.0.0]
 ### Changed

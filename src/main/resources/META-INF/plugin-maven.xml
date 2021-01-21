@@ -1,6 +1,6 @@
 <idea-plugin>
 
-    <extensions defaultExtensionNs="io.projectenv.intellijplugin">
+    <extensions defaultExtensionNs="ch.repolevedavaj.projectenv.intellijplugin">
         <toolConfigurer
                 implementation="io.projectenv.intellijplugin.configurers.maven.MavenConfigurer"/>
     </extensions>

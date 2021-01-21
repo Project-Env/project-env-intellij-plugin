@@ -15,7 +15,7 @@ import java.io.File
 class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
 
     private val TOOL_CONFIGURER_EXTENSION_POINT_NAME: ProjectExtensionPointName<ToolConfigurer<ToolInfo>> =
-        ProjectExtensionPointName("io.projectenv.intellijplugin.toolConfigurer")
+        ProjectExtensionPointName("ch.repolevedavaj.projectenv.intellijplugin.toolConfigurer")
 
     override fun refreshProjectEnv() {
         val configurationFile = File(project.basePath, "project-env.yml")
