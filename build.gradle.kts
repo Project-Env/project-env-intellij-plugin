@@ -44,7 +44,7 @@ repositories {
 }
 dependencies {
     implementation("io.projectenv:core:1.0.0")
-    testImplementation("org.assertj:assertj-core:3.18.1")
+    testImplementation("org.assertj:assertj-core:3.19.0")
 }
 
 // Configure gradle-intellij-plugin plugin.
