@@ -1,4 +1,4 @@
-# project-env-intellij-plugin
+# Project-Env IntelliJ-Plugin
 
 ![Build](https://github.com/Project-Env/project-env-intellij-plugin/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/15746-project-env.svg)](https://plugins.jetbrains.com/plugin/15746-project-env)

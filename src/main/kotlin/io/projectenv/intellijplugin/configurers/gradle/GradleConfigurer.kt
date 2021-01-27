@@ -29,5 +29,12 @@ class GradleConfigurer(val project: Project) : ToolConfigurer<GradleInfo> {
                 projectSettings.gradleHome = toolInfo.location.canonicalPath
             }
         }
+
+        override fun onProjectsLoaded(settings: MutableCollection<GradleProjectSettings>) {
+            for (projectSettings in settings) {
+                projectSettings.distributionType = DistributionType.LOCAL
+                projectSettings.gradleHome = toolInfo.location.canonicalPath
+            }
+        }
     }
 }

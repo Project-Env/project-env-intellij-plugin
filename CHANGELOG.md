@@ -4,16 +4,12 @@
 
 ## [Unreleased]
 ### Added
+- Added simple progress bar to notify the user about the running Project-Env process.
 
 ### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
+- Updated Project-Env core library to version `1.1.0`.
+- Gradle project's are updated now after they were loaded too.
+- Improved plugin icon.
 
 ## [1.0.1]
 ### Fixed
