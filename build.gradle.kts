@@ -43,7 +43,7 @@ repositories {
     }
 }
 dependencies {
-    implementation("io.projectenv:core:1.1.1")
+    implementation("io.projectenv:core:1.1.2")
     testImplementation("org.assertj:assertj-core:3.19.0")
 }
 

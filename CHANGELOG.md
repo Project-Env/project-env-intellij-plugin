@@ -4,7 +4,7 @@
 
 ## [Unreleased]
 ### Changed
-- Updated Project-Env core library to version `1.1.1`.
+- Updated Project-Env core library to version `1.1.2`.
 
 ## [1.1.0]
 ### Added
