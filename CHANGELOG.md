@@ -3,18 +3,10 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
-### Added
-
 ### Changed
+- Updated Project-Env core library to version `1.1.1`.
 
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-## [unspecified]
+## [1.1.0]
 ### Added
 - Added simple progress bar to notify the user about the running Project-Env process.
 
