@@ -3,16 +3,38 @@
 
 name: Release
 on:
-  release:
-    types: [prereleased, released]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The name of the version which should be released'
+        required: true
 
 jobs:
-
-  # Prepare and publish the plugin to the Marketplace repository
-  release:
-    name: Publish Plugin
+  build:
     runs-on: ubuntu-latest
     steps:
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2
+
+      # Set environment variables
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^pluginVerifierIdeVersions:" | base64)"
+          CHANGELOG="$(./gradlew getChangelog --unreleased --no-header --console=plain -q)"
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+          ARTIFACT="${NAME}-${VERSION}.zip"
+
+          echo "::set-output name=ideVersions::$IDE_VERSIONS"
+          echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
+          echo "::set-output name=changelog::$CHANGELOG"
+          echo "::set-output name=artifact::$ARTIFACT"
 
       # Setup Java 11 environment for the next steps
       - name: Setup Java
@@ -20,40 +42,75 @@ jobs:
         with:
           java-version: 11
 
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2
+      # Cache Gradle dependencies
+      - name: Setup Gradle Dependencies Cache
+        uses: actions/cache@v2
         with:
-          ref: ${{ github.event.release.tag_name }}
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
+      # Cache Gradle Wrapper
+      - name: Setup Gradle Wrapper Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+
+      # Cache Plugin Verifier IDEs
+      - name: Setup Plugin Verifier IDEs Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
+          key: ${{ runner.os }}-plugin-verifier-${{ steps.properties.outputs.ideVersions }}
+
+      # Run detekt, ktlint and tests
+      - name: Run Linters and Test
+        run: ./gradlew check -PpluginVersion=${{ github.event.inputs.version }}
+
+      # Run verifyPlugin Gradle task
+      - name: Verify Plugin
+        run: ./gradlew verifyPlugin -PpluginVersion=${{ github.event.inputs.version }}
+
+      # Build artifact using buildPlugin Gradle task
+      - name: Build Plugin
+        run: ./gradlew buildPlugin -PpluginVersion=${{ github.event.inputs.version }}
+
+      # Run IntelliJ Plugin Verifier action using GitHub Action
+      - name: Verify Plugin
+        run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }} -PpluginVersion=${{ github.event.inputs.version }}
+
+      # Create Github release
+      - name: Create Release
+        id: createRelease
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.event.inputs.version }}
+          release_name: v${{ github.event.inputs.version }}
+          body: ${{ steps.properties.outputs.changelog }}
+
+      # Upload artifact as a release asset
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.createRelease.outputs.upload_url }}
+          asset_path: ./${{ steps.properties.outputs.artifact }}
+          asset_name: ${{ steps.properties.outputs.artifact }}
+          asset_content_type: application/zip
+          
       # Publish the plugin to the Marketplace
       - name: Publish Plugin
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-        run: ./gradlew publishPlugin
-
-  # Patch changelog, commit and push to the current repository
-  changelog:
-    name: Update Changelog
-    needs: release
-    runs-on: ubuntu-latest
-    steps:
-
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.release.tag_name }}
+        run: ./gradlew publishPlugin -PpluginVersion=${{ github.event.inputs.version }}
 
       # Update Unreleased section with the current version
       - name: Patch Changelog
-        run: ./gradlew patchChangelog
+        run: ./gradlew patchChangelog -PpluginVersion=${{ github.event.inputs.version }}
 
       # Commit patched Changelog
       - name: Commit files

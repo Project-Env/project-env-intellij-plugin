@@ -5,6 +5,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     // Java support
     id("java")
+    // JaCoCo report support
+    id("jacoco")
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.4.21"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
@@ -13,6 +15,8 @@ plugins {
     id("org.jetbrains.changelog") version "1.0.1"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
     id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
+    // Sonar support
+    id("org.sonarqube") version "3.0"
 }
 
 // Import variables from gradle.properties file
@@ -60,13 +64,35 @@ intellij {
     setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
 }
 
+sonarqube {
+    properties {
+        property("sonar.projectName", "Example of SonarQube Scanner for Gradle Usage")
+        property("sonar.projectKey", "Project-Env_project-env-intellij-plugin")
+        property("sonar.organization", "project-env")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
+
 tasks {
+
     withType<JavaCompile> {
         sourceCompatibility = "11"
         targetCompatibility = "11"
     }
+
     withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "11"
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.isEnabled = true
+        }
+        dependsOn(test)
+    }
+
+    test {
+        finalizedBy(jacocoTestReport)
     }
 
     patchPluginXml {
