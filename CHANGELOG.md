@@ -14,7 +14,8 @@
 ### Fixed
 
 ### Security
-## [unspecified]
+
+## [1.1.1]
 ### Changed
 - Updated Project-Env core library to version `1.1.2`.
 
