@@ -66,7 +66,7 @@ intellij {
 
 sonarqube {
     properties {
-        property("sonar.projectName", "Example of SonarQube Scanner for Gradle Usage")
+        property("sonar.projectName", "intellij-plugin")
         property("sonar.projectKey", "Project-Env_project-env-intellij-plugin")
         property("sonar.organization", "project-env")
         property("sonar.host.url", "https://sonarcloud.io")
