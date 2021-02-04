@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
-    <g transform="matrix(0.036,0,0,0.036,20,20)">
-        <g id="project-env-logo" transform="matrix(1,0,0,1,-500,-500)">
+    <g transform="matrix(0.038,0,0,0.038,20,20)">
+        <g id="project-env-logo.svg" transform="matrix(1,0,0,1,-500,-500)">
             <clipPath id="_clip1">
                 <rect x="0" y="0" width="1000" height="1000"/>
             </clipPath>
@@ -10,20 +10,26 @@
                 <g transform="matrix(1.35979,0,0,1.69618,-53.0324,-175.933)">
                     <rect x="70.779" y="134.695" width="671.849" height="532.964" style="fill:rgb(242,242,242);stroke:rgb(38,38,38);stroke-width:67.76px;"/>
                 </g>
-                <g transform="matrix(1.22915,0,0,1.27093,0.348354,-238.286)">
+                <g transform="matrix(1.22915,0,-3.08149e-33,0.333053,0.348354,-11.8316)">
                     <rect x="34.873" y="641.666" width="743.255" height="298.581" style="fill:rgb(38,38,38);"/>
                 </g>
-                <g transform="matrix(1.17125,0,0,1.17125,83.7652,923.98)">
-                    <text x="0px" y="0px" style="font-family:'Courier-Bold', 'Courier';font-size:175px;fill:rgb(242,242,242);">Env</text>
+                <g transform="matrix(1.22915,0,-3.08149e-33,0.333053,0.348354,185.847)">
+                    <rect x="34.873" y="641.666" width="743.255" height="298.581" style="fill:rgb(38,38,38);"/>
                 </g>
-                <g transform="matrix(1.17125,0,0,1.17125,79.7363,766.317)">
+                <g transform="matrix(1.22915,0,-3.08149e-33,1.4084,0.348354,-405.722)">
+                    <rect x="34.873" y="641.666" width="743.255" height="298.581" style="fill:rgb(38,38,38);"/>
+                </g>
+                <g transform="matrix(1.17125,0,0,1.17125,89.1891,900.281)">
+                    <text x="0px" y="0px" style="font-family:'Courier-Bold', 'Courier';font-size:256.137px;fill:rgb(242,242,242);">Env</text>
+                </g>
+                <g transform="matrix(1.17125,0,0,1.17125,82.8908,668.103)">
                     <g id="_-Project-" serif:id="(Project)">
-                        <text x="0px" y="0px" style="font-family:'Courier-Bold', 'Courier';font-size:170.758px;fill:rgb(242,242,242);">Project</text>
+                        <text x="0px" y="0px" style="font-family:'Courier-Bold', 'Courier';font-size:256.137px;fill:rgb(242,242,242);">Proj</text>
                     </g>
                 </g>
             </g>
         </g>
-        <g id="project-env-logo1" serif:id="project-env-logo">
+        <g id="project-env-logo.svg1" serif:id="project-env-logo.svg">
         </g>
     </g>
 </svg>
