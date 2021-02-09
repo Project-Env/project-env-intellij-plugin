@@ -5,8 +5,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.projectRoots.JavaSdk
 import com.intellij.openapi.projectRoots.ProjectJdkTable
 import com.intellij.openapi.roots.ProjectRootManager
-import io.projectenv.core.toolinfo.JdkInfo
-import io.projectenv.core.toolinfo.ToolInfo
+import io.projectenv.core.tools.info.JdkInfo
+import io.projectenv.core.tools.info.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 
 class JdkConfigurer(val project: Project) : ToolConfigurer<JdkInfo> {

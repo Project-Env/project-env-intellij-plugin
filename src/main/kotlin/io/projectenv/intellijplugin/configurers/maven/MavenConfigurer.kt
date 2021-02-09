@@ -3,8 +3,8 @@ package io.projectenv.intellijplugin.configurers.maven
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import io.projectenv.core.toolinfo.MavenInfo
-import io.projectenv.core.toolinfo.ToolInfo
+import io.projectenv.core.tools.info.MavenInfo
+import io.projectenv.core.tools.info.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import org.jetbrains.idea.maven.execution.MavenRunner

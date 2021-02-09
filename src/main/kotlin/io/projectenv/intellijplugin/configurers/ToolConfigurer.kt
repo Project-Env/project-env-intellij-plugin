@@ -1,7 +1,7 @@
 package io.projectenv.intellijplugin.configurers
 
 import com.intellij.openapi.Disposable
-import io.projectenv.core.toolinfo.ToolInfo
+import io.projectenv.core.tools.info.ToolInfo
 
 interface ToolConfigurer<ToolInfoType : ToolInfo> : Disposable {
 

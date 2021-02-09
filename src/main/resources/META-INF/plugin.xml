@@ -27,6 +27,25 @@
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 
+    <actions>
+        <group id="ch.projectenv.actions"
+               text="Project-Env"
+               popup="true"
+               icon="ProjectEnvPluginIcons.Default">
+            <add-to-group group-id="ToolsMenu"/>
+        </group>
+        <action id="io.projectenv.intellijplugin.actions.CleanProjectEnvAction"
+                class="io.projectenv.intellijplugin.actions.CleanProjectEnvAction"
+                text="Clean">
+            <add-to-group group-id="ch.projectenv.actions"/>
+        </action>
+        <action id="io.projectenv.intellijplugin.actions.ReloadProjectEnvAction"
+                class="io.projectenv.intellijplugin.actions.ReloadProjectEnvAction"
+                text="Reload">
+            <add-to-group group-id="ch.projectenv.actions"/>
+        </action>
+    </actions>
+
     <depends optional="true" config-file="plugin-jdk.xml">com.intellij.java</depends>
     <depends optional="true" config-file="plugin-maven.xml">org.jetbrains.idea.maven</depends>
     <depends optional="true" config-file="plugin-gradle.xml">com.intellij.gradle</depends>

@@ -5,8 +5,8 @@ import com.intellij.javascript.nodejs.interpreter.local.NodeJsLocalInterpreter
 import com.intellij.javascript.nodejs.interpreter.local.NodeJsLocalInterpreterManager
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
-import io.projectenv.core.toolinfo.NodeInfo
-import io.projectenv.core.toolinfo.ToolInfo
+import io.projectenv.core.tools.info.NodeInfo
+import io.projectenv.core.tools.info.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 
 class NodeConfigurer(val project: Project) : ToolConfigurer<NodeInfo> {
