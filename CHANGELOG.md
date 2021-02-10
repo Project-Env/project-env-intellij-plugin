@@ -4,6 +4,19 @@
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [2.0.0]
+### Added
 - Action in `Tools` menu to refresh Project-Env.
 - Action in `Tools` menu to clean previous installed and now unused Project-Env tools.
 
