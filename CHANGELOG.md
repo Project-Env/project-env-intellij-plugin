@@ -3,6 +3,9 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
+### Changed
+- Improved plugin icon by transforming text into paths.
+
 ### Fixed
 - Do not reload Project-Env configuration during clean-up.
 - Clear environment variables and path elements before registering the new ones.
