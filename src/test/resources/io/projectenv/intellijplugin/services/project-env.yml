@@ -22,11 +22,6 @@ tools:
     downloadUris:
       - downloadUri: "https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz"
 
-  gradle:
-    toolName: "gradle"
-    downloadUris:
-      - downloadUri: "https://downloads.gradle-dn.com/distributions/gradle-6.7.1-bin.zip"
-
   node:
     toolName: "node"
     downloadUris:
@@ -42,12 +37,3 @@ tools:
           - "install"
           - "-g"
           - "yarn"
-
-  genericTools:
-    - toolName: "jaxb-ri"
-      downloadUris:
-        - downloadUri: "https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-ri/3.0.0/jaxb-ri-3.0.0.zip"
-      environmentVariables:
-        JAXB_HOME: ""
-      pathElements:
-        - "bin"

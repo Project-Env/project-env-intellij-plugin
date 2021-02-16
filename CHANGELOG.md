@@ -3,12 +3,9 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
-### Added
-- Action in `Tools` menu to refresh Project-Env.
-- Action in `Tools` menu to clean previous installed and now unused Project-Env tools.
-
-### Changed
-- Updated Project-Env core library to version `2.0.0`.
+### Fixed
+- Do not reload Project-Env configuration during clean-up.
+- Clear environment variables and path elements before registering the new ones.
 
 ## [2.0.0]
 ### Added

@@ -8,6 +8,11 @@ class ExecutionEnvironmentServiceImpl : ExecutionEnvironmentService {
     val exports = HashMap<String, String>()
     val pathElements = ArrayList<String>()
 
+    override fun clear() {
+        exports.clear()
+        pathElements.clear()
+    }
+
     override fun registerExport(name: String, value: File) {
         exports[name] = value.canonicalPath
     }
@@ -18,8 +23,14 @@ class ExecutionEnvironmentServiceImpl : ExecutionEnvironmentService {
 
     override fun createEnvironment(): Map<String, String> {
         val environment = HashMap<String, String>()
-        environment.putAll(exports)
-        environment.put("PATH", createPathVariableValue())
+
+        if (exports.isNotEmpty()) {
+            environment.putAll(exports)
+        }
+
+        if (pathElements.isNotEmpty()) {
+            environment["PATH"] = createPathVariableValue()
+        }
 
         return environment
     }

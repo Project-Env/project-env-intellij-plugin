@@ -6,11 +6,11 @@ import com.intellij.openapi.extensions.ProjectExtensionPointName
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import io.projectenv.core.configuration.ProjectEnvConfiguration
-import io.projectenv.core.configuration.ProjectEnvConfigurationFactory
 import io.projectenv.core.tools.info.ToolInfo
 import io.projectenv.core.tools.repository.ToolsRepositoryFactory
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
+import io.projectenv.intellijplugin.services.ProjectEnvConfigurationService
 import io.projectenv.intellijplugin.services.ProjectEnvService
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -25,54 +25,44 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
     private val projectRoot = File(project.basePath)
 
     override fun refreshProjectEnv() {
-        ProgressManager.getInstance().runProcessWithProgressSynchronously(
-            {
-                try {
-                    val configurationFile = getProjectEnvConfiguration()
-                    if (configurationFile.exists()) {
-                        val projectEnvConfiguration: ProjectEnvConfiguration =
-                            ProjectEnvConfigurationFactory.createFromFile(configurationFile)
+        runProcess("Installing Project-Env") {
+            val configurationService = project.service<ProjectEnvConfigurationService>()
+            configurationService.refresh()
 
-                        val toolDetailsList = installTools(projectEnvConfiguration)
-                        configureExecutionEnvironment(toolDetailsList)
+            val configuration = configurationService.getConfiguration()
+            if (configuration != null) {
+                val toolDetailsList = installTools(configuration)
+                configureExecutionEnvironment(toolDetailsList)
 
-                        ApplicationManager.getApplication().invokeLater {
-                            configureTools(toolDetailsList)
-                        }
-                    }
-                } catch (exception: Exception) {
-                    logger.error("failed to refresh project environment", exception)
+                ApplicationManager.getApplication().invokeLater {
+                    configureTools(toolDetailsList)
                 }
-            },
-            "Installing Project-Env",
-            false,
-            project
-        )
+            }
+        }
     }
 
     override fun cleanProjectEnv() {
+        runProcess("Cleaning Project-Env") {
+            val configuration = project.service<ProjectEnvConfigurationService>().getConfiguration()
+            if (configuration != null) {
+                cleanTools(configuration)
+            }
+        }
+    }
+
+    private fun runProcess(title: String, runnable: Runnable) {
         ProgressManager.getInstance().runProcessWithProgressSynchronously(
             {
                 try {
-                    val configurationFile = getProjectEnvConfiguration()
-                    if (configurationFile.exists()) {
-                        val projectEnvConfiguration: ProjectEnvConfiguration =
-                            ProjectEnvConfigurationFactory.createFromFile(configurationFile)
-
-                        cleanTools(projectEnvConfiguration)
-                    }
+                    runnable.run()
                 } catch (exception: Exception) {
-                    logger.error("failed to clean Project-Env", exception)
+                    logger.error("error running '$title'", exception)
                 }
             },
-            "Cleaning Project-Env",
+            title,
             false,
             project
         )
-    }
-
-    private fun getProjectEnvConfiguration(): File {
-        return File(project.basePath, "project-env.yml")
     }
 
     private fun installTools(projectEnvConfiguration: ProjectEnvConfiguration): List<ToolInfo> {
@@ -91,6 +81,7 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
 
     private fun configureExecutionEnvironment(toolInfos: List<ToolInfo>) {
         val executionEnvironmentService = project.service<ExecutionEnvironmentService>()
+        executionEnvironmentService.clear()
 
         for (toolInfo in toolInfos) {
             for (export in toolInfo.environmentVariables) {
