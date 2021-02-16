@@ -1,7 +1,6 @@
 package io.projectenv.intellijplugin.services
 
 import com.intellij.openapi.components.service
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.projectenv.intellijplugin.services.impl.ExecutionEnvironmentServiceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
