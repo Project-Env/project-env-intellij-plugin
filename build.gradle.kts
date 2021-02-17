@@ -64,6 +64,10 @@ intellij {
     setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
 }
 
+changelog {
+    version = pluginVersion
+}
+
 sonarqube {
     properties {
         property("sonar.projectName", "intellij-plugin")
