@@ -9,6 +9,7 @@
 ### Fixed
 - Do not reload Project-Env configuration during clean-up.
 - Clear environment variables and path elements before registering the new ones.
+- Fixed memory leak of Gradle configurer.
 
 ## [2.0.0]
 ### Added

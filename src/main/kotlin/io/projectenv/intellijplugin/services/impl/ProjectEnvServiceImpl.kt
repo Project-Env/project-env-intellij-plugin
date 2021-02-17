@@ -50,6 +50,10 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
         }
     }
 
+    override fun dispose() {
+        // noop
+    }
+
     private fun runProcess(title: String, runnable: Runnable) {
         ProgressManager.getInstance().runProcessWithProgressSynchronously(
             {
