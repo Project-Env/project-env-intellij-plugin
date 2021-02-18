@@ -3,6 +3,18 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [2.1.0]
 ### Changed
 - Improved plugin icon by transforming text into paths.
 - Broaden plugin support to 2020.1.
