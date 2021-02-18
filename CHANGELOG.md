@@ -5,6 +5,7 @@
 ## [Unreleased]
 ### Changed
 - Improved plugin icon by transforming text into paths.
+- Broaden plugin support to 2020.1.
 
 ### Fixed
 - Do not reload Project-Env configuration during clean-up.
