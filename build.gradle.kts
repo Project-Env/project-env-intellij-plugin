@@ -43,11 +43,14 @@ repositories {
     mavenCentral()
     jcenter()
     maven {
-        url = uri("https://dl.bintray.com/project-env/maven-repo")
+        name = "github"
+        url = uri("https://maven.pkg.github.com/Project-Env/project-env-core")
+        credentials(PasswordCredentials::class)
     }
 }
+
 dependencies {
-    implementation("io.projectenv:core:2.0.0")
+    implementation("io.projectenv:core:2.1.0")
     testImplementation("org.assertj:assertj-core:3.19.0")
 }
 

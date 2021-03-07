@@ -6,6 +6,7 @@ import com.intellij.openapi.extensions.ProjectExtensionPointName
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import io.projectenv.core.configuration.ProjectEnvConfiguration
+import io.projectenv.core.tools.info.SimpleToolInfo
 import io.projectenv.core.tools.info.ToolInfo
 import io.projectenv.core.tools.repository.ToolsRepositoryFactory
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
@@ -88,14 +89,14 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
         executionEnvironmentService.clear()
 
         for (toolInfo in toolInfos) {
-            for (export in toolInfo.environmentVariables) {
-                executionEnvironmentService.registerExport(export.key, export.value)
-            }
-        }
+            if (toolInfo is SimpleToolInfo) {
+                for (export in toolInfo.environmentVariables) {
+                    executionEnvironmentService.registerExport(export.key, export.value)
+                }
 
-        for (toolDetails in toolInfos) {
-            for (pathElement in toolDetails.pathElements) {
-                executionEnvironmentService.registerPathElement(pathElement)
+                for (pathElement in toolInfo.pathElements) {
+                    executionEnvironmentService.registerPathElement(pathElement)
+                }
             }
         }
     }

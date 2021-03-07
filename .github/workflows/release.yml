@@ -64,6 +64,10 @@ jobs:
           path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
           key: ${{ runner.os }}-plugin-verifier-${{ steps.properties.outputs.ideVersions }}
 
+      - run: |
+          echo "ORG_GRADLE_PROJECT_githubUsername=${{ github.actor }}" >> $GITHUB_ENV
+          echo "ORG_GRADLE_PROJECT_githubPassword=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
       # Run detekt, ktlint and tests
       - name: Run Linters and Test
         run: ./gradlew check -PpluginVersion=${{ github.event.inputs.version }}

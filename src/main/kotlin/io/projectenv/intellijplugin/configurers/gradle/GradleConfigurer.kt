@@ -14,7 +14,7 @@ import org.jetbrains.plugins.gradle.settings.GradleSettings
 class GradleConfigurer(project: Project) : ToolConfigurer<GradleInfo>,
     ExternalSystemSettingsListenerAdapter<GradleProjectSettings>() {
 
-    private var toolInfo: ToolInfo? = null
+    private var toolInfo: GradleInfo? = null
 
     init {
         val disposableParent = project.service<ProjectEnvService>()
