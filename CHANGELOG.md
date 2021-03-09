@@ -3,6 +3,18 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [2.2.0]
 ### Changed
 - Updated Project-Env core library to version `2.1.0` which introduces the support for Git hooks installation.
 
