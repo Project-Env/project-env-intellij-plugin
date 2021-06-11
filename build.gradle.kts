@@ -16,7 +16,7 @@ plugins {
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
     // Sonar support
-    id("org.sonarqube") version "3.2.0"
+    id("org.sonarqube") version "3.3"
 }
 
 // Import variables from gradle.properties file
