@@ -3,29 +3,28 @@ package io.projectenv.intellijplugin.configurers.gradle
 import com.intellij.openapi.components.service
 import com.intellij.openapi.externalSystem.settings.ExternalSystemSettingsListenerAdapter
 import com.intellij.openapi.project.Project
-import io.projectenv.core.tools.info.GradleInfo
-import io.projectenv.core.tools.info.ToolInfo
+import io.projectenv.core.cli.api.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import io.projectenv.intellijplugin.services.ProjectEnvService
 import org.jetbrains.plugins.gradle.settings.DistributionType
 import org.jetbrains.plugins.gradle.settings.GradleProjectSettings
 import org.jetbrains.plugins.gradle.settings.GradleSettings
 
-class GradleConfigurer(project: Project) : ToolConfigurer<GradleInfo>,
+class GradleConfigurer(project: Project) : ToolConfigurer,
     ExternalSystemSettingsListenerAdapter<GradleProjectSettings>() {
 
-    private var toolInfo: GradleInfo? = null
+    private var toolInfo: ToolInfo? = null
 
     init {
         val disposableParent = project.service<ProjectEnvService>()
         GradleSettings.getInstance(project).subscribe(this, disposableParent)
     }
 
-    override fun supportsType(toolInfo: ToolInfo): Boolean {
-        return toolInfo is GradleInfo
+    override fun getToolIdentifier(): String {
+        return "gradle"
     }
 
-    override fun configureTool(toolInfo: GradleInfo) {
+    override fun configureTool(toolInfo: ToolInfo) {
         this.toolInfo = toolInfo
     }
 
@@ -44,7 +43,7 @@ class GradleConfigurer(project: Project) : ToolConfigurer<GradleInfo>,
 
         for (projectSettings in settings) {
             projectSettings.distributionType = DistributionType.LOCAL
-            projectSettings.gradleHome = toolInfo!!.location.canonicalPath
+            projectSettings.gradleHome = toolInfo!!.toolBinariesRoot.get().canonicalPath
         }
     }
 }

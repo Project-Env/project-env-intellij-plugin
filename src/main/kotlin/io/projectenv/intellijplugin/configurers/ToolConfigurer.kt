@@ -1,13 +1,13 @@
 package io.projectenv.intellijplugin.configurers
 
 import com.intellij.openapi.Disposable
-import io.projectenv.core.tools.info.ToolInfo
+import io.projectenv.core.cli.api.ToolInfo
 
-interface ToolConfigurer<ToolInfoType : ToolInfo> : Disposable {
+interface ToolConfigurer : Disposable {
 
-    fun supportsType(toolInfo: ToolInfo): Boolean
+    fun getToolIdentifier(): String
 
-    fun configureTool(toolInfo: ToolInfoType)
+    fun configureTool(toolInfo: ToolInfo)
 
     override fun dispose() {
         // noop

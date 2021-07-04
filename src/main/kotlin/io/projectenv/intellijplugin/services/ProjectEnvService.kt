@@ -5,6 +5,4 @@ import com.intellij.openapi.Disposable
 interface ProjectEnvService : Disposable {
 
     fun refreshProjectEnv()
-
-    fun cleanProjectEnv()
 }

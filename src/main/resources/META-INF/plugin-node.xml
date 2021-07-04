@@ -2,7 +2,7 @@
 
     <extensions defaultExtensionNs="ch.repolevedavaj.projectenv.intellijplugin">
         <toolConfigurer
-                implementation="io.projectenv.intellijplugin.configurers.node.NodeConfigurer"/>
+                implementation="io.projectenv.intellijplugin.configurers.node.NodeJsConfigurer"/>
     </extensions>
 
 </idea-plugin>

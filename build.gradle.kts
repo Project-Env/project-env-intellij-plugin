@@ -50,8 +50,14 @@ repositories {
 }
 
 dependencies {
-    implementation("io.projectenv:core:2.1.0")
+    val projectEnvCliVersion = "3.0.0"
+
+    implementation("io.projectenv.core:cli-api:$projectEnvCliVersion")
+    testImplementation("io.projectenv.core.commons:archive:$projectEnvCliVersion")
+    testImplementation("io.projectenv.core.commons:string-substitutor:$projectEnvCliVersion")
+
     testImplementation("org.assertj:assertj-core:3.19.0")
+    testImplementation("com.github.stefanbirkner:system-lambda:1.2.0")
 }
 
 // Configure gradle-intellij-plugin plugin.

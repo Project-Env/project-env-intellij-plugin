@@ -1,0 +1,18 @@
+tools_directory = ".tools"
+
+[jdk]
+java_version = "11"
+distribution = "GraalVM"
+distribution_version = "20.3.0"
+post_extraction_commands = [
+    "gu install native-image"
+]
+
+[maven]
+version = "3.6.3"
+global_settings_file = "settings.xml"
+user_settings_file = "settings-${USER}.xml"
+
+[nodejs]
+version = "14.15.3"
+post_extraction_commands = ["npm install -g yarn"]

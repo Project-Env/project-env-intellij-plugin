@@ -5,17 +5,16 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.projectRoots.JavaSdk
 import com.intellij.openapi.projectRoots.ProjectJdkTable
 import com.intellij.openapi.roots.ProjectRootManager
-import io.projectenv.core.tools.info.JdkInfo
-import io.projectenv.core.tools.info.ToolInfo
+import io.projectenv.core.cli.api.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 
-class JdkConfigurer(val project: Project) : ToolConfigurer<JdkInfo> {
+class JdkConfigurer(val project: Project) : ToolConfigurer {
 
-    override fun supportsType(toolInfo: ToolInfo): Boolean {
-        return toolInfo is JdkInfo
+    override fun getToolIdentifier(): String {
+        return "jdk"
     }
 
-    override fun configureTool(toolInfo: JdkInfo) {
+    override fun configureTool(toolInfo: ToolInfo) {
         ApplicationManager.getApplication().runWriteAction {
             val jdkName = createJdkName()
             removeOldJdk(jdkName)
@@ -34,8 +33,8 @@ class JdkConfigurer(val project: Project) : ToolConfigurer<JdkInfo> {
         }
     }
 
-    private fun createNewJdk(toolInfo: JdkInfo, jdkName: String) {
-        val newJdk = JavaSdk.getInstance().createJdk(jdkName, toolInfo.location.canonicalPath)
+    private fun createNewJdk(toolInfo: ToolInfo, jdkName: String) {
+        val newJdk = JavaSdk.getInstance().createJdk(jdkName, toolInfo.toolBinariesRoot.get().canonicalPath)
         ProjectJdkTable.getInstance().addJdk(newJdk)
         ProjectRootManager.getInstance(project).projectSdk = newJdk
     }

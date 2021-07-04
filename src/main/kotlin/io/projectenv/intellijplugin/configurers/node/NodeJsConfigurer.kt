@@ -5,17 +5,16 @@ import com.intellij.javascript.nodejs.interpreter.local.NodeJsLocalInterpreter
 import com.intellij.javascript.nodejs.interpreter.local.NodeJsLocalInterpreterManager
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
-import io.projectenv.core.tools.info.NodeInfo
-import io.projectenv.core.tools.info.ToolInfo
+import io.projectenv.core.cli.api.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 
-class NodeConfigurer(val project: Project) : ToolConfigurer<NodeInfo> {
+class NodeJsConfigurer(val project: Project) : ToolConfigurer {
 
-    override fun supportsType(toolInfo: ToolInfo): Boolean {
-        return toolInfo is NodeInfo
+    override fun getToolIdentifier(): String {
+        return "nodejs"
     }
 
-    override fun configureTool(toolInfo: NodeInfo) {
+    override fun configureTool(toolInfo: ToolInfo) {
         ApplicationManager.getApplication().runWriteAction {
             val interpreter = NodeJsLocalInterpreter(toolInfo.primaryExecutable.get().canonicalPath)
 

@@ -20,9 +20,7 @@
         <projectService
                 serviceInterface="io.projectenv.intellijplugin.services.ProjectEnvService"
                 serviceImplementation="io.projectenv.intellijplugin.services.impl.ProjectEnvServiceImpl"/>
-        <projectService
-                serviceInterface="io.projectenv.intellijplugin.services.ProjectEnvConfigurationService"
-                serviceImplementation="io.projectenv.intellijplugin.services.impl.ProjectEnvConfigurationServiceImpl"/>
+        <notificationGroup id="Project-Env" displayType="BALLOON"/>
     </extensions>
 
     <applicationListeners>
@@ -37,11 +35,6 @@
                icon="ProjectEnvPluginIcons.Default">
             <add-to-group group-id="ToolsMenu"/>
         </group>
-        <action id="io.projectenv.intellijplugin.actions.CleanProjectEnvAction"
-                class="io.projectenv.intellijplugin.actions.CleanProjectEnvAction"
-                text="Clean">
-            <add-to-group group-id="ch.projectenv.actions"/>
-        </action>
         <action id="io.projectenv.intellijplugin.actions.ReloadProjectEnvAction"
                 class="io.projectenv.intellijplugin.actions.ReloadProjectEnvAction"
                 text="Reload">
