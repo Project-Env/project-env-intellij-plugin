@@ -3,6 +3,18 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [3.0.0]
 ### Changed
 - Refactored the plugin, so it uses the installed Project-Env Core CLI to install and manage the required tools. 
 
