@@ -79,10 +79,11 @@ changelog {
 
 sonarqube {
     properties {
-        property("sonar.projectName", "intellij-plugin")
+        property("sonar.projectName", "project-env-intellij-plugin")
         property("sonar.projectKey", "Project-Env_project-env-intellij-plugin")
         property("sonar.organization", "project-env")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.coverage.exclusions", "**/*Exception.kt")
     }
 }
 
