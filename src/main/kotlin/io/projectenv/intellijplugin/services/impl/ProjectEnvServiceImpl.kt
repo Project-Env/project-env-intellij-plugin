@@ -38,7 +38,7 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
             if (projectEnvCliExecutable == null || !projectEnvCliExecutable.exists()) {
                 NotificationGroupManager.getInstance().getNotificationGroup("Project-Env")
                     .createNotification(
-                        "Could not resolve Project-Env CLI through the PATH variable. Please make sure that the CLI is installed.",
+                        "Could not resolve Project-Env CLI. Please make sure that the CLI is installed and on PATH.",
                         NotificationType.WARNING
                     )
                     .notify(project)
@@ -60,14 +60,34 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
 
     private fun getProjectEnvCliExecutable(): File? {
         val projectEnvCliExecutableName = getProjectEnvCliExecutableName()
-        for (pathElement in System.getenv()["PATH"]?.split(File.pathSeparator).orEmpty()) {
-            val projectEnvCliExecutable = File(pathElement, projectEnvCliExecutableName)
+        for (candidate in getProjectEnvCliExecutableLocationCandidates()) {
+            val projectEnvCliExecutable = File(candidate, projectEnvCliExecutableName)
             if (projectEnvCliExecutable.exists()) {
                 return projectEnvCliExecutable
             }
         }
 
         return null
+    }
+
+    private fun getProjectEnvCliExecutableLocationCandidates(): ArrayList<String> {
+        val candidates = ArrayList<String>()
+        candidates.addAll(getPathElements())
+        candidates.addAll(getKnownExecutableLocations())
+
+        return candidates
+    }
+
+    private fun getPathElements(): List<String> {
+        return System.getenv()["PATH"]?.split(File.pathSeparator).orEmpty()
+    }
+
+    private fun getKnownExecutableLocations(): List<String> {
+        return if (!SystemUtils.IS_OS_WINDOWS) {
+            Collections.singletonList("/usr/local/bin")
+        } else {
+            Collections.emptyList()
+        }
     }
 
     private fun getProjectEnvCliExecutableName(): String {

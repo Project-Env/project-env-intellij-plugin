@@ -4,19 +4,11 @@
 
 ## [Unreleased]
 ### Added
+- Try to resolve Project-Env CLI from directory `/usr/local/bin` if not resolvable through `PATH`.
 
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 ## [3.0.1]
 ### Removed
-- removed support for IntelliJ versions < 2020.3.X
+- Removed support for IntelliJ versions < 2020.3.X.
 
 ## [3.0.0]
 ### Changed
