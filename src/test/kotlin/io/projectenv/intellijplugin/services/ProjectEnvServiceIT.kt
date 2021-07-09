@@ -11,6 +11,8 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.projectenv.core.commons.archive.ArchiveExtractorFactory
 import io.projectenv.core.commons.download.DownloadUrlSubstitutorFactory
 import io.projectenv.core.commons.download.ImmutableDownloadUrlDictionary
+import io.projectenv.core.commons.process.ProcessEnvironmentHelper.createExtendedPathValue
+import io.projectenv.core.commons.process.ProcessEnvironmentHelper.getPathVariableName
 import io.projectenv.core.commons.system.CPUArchitecture
 import io.projectenv.core.commons.system.OperatingSystem
 import org.apache.commons.io.FileUtils
@@ -40,9 +42,8 @@ class ProjectEnvServiceIT : BasePlatformTestCase() {
     @Test
     fun testRefreshProjectEnv() {
         val pathElement = setupProjectEnvCli()
-        val path = createdJoinedPathVariable(pathElement)
 
-        withEnvironmentVariable("PATH", path).execute {
+        withEnvironmentVariable(getPathVariableName(), createExtendedPathValue(pathElement)).execute {
             copyResourceToProjectRoot("project-env.toml")
 
             val service = myFixture.project.service<ProjectEnvService>()
@@ -136,12 +137,6 @@ class ProjectEnvServiceIT : BasePlatformTestCase() {
 
     private fun extractArchive(archive: File, target: File) {
         ArchiveExtractorFactory.createArchiveExtractor().extractArchive(archive, target)
-    }
-
-    private fun createdJoinedPathVariable(pathElement: File): String {
-        val originalPath = System.getenv().get("PATH")
-
-        return "${pathElement.canonicalPath}${File.pathSeparator}$originalPath"
     }
 
     private fun assertMavenSettings() {

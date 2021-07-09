@@ -1,12 +1,13 @@
 package io.projectenv.intellijplugin.services.impl
 
+import io.projectenv.core.commons.process.ProcessEnvironmentHelper.createProcessEnvironment
 import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import java.io.File
 
 class ExecutionEnvironmentServiceImpl : ExecutionEnvironmentService {
 
-    val exports = HashMap<String, String>()
-    val pathElements = ArrayList<String>()
+    private val exports = HashMap<String, File>()
+    private val pathElements = ArrayList<File>()
 
     override fun clear() {
         exports.clear()
@@ -14,31 +15,14 @@ class ExecutionEnvironmentServiceImpl : ExecutionEnvironmentService {
     }
 
     override fun registerExport(name: String, value: File) {
-        exports[name] = value.canonicalPath
+        exports[name] = value
     }
 
     override fun registerPathElement(pathElement: File) {
-        pathElements.add(pathElement.canonicalPath)
+        pathElements.add(pathElement)
     }
 
     override fun createEnvironment(): Map<String, String> {
-        val environment = HashMap<String, String>()
-
-        if (exports.isNotEmpty()) {
-            environment.putAll(exports)
-        }
-
-        if (pathElements.isNotEmpty()) {
-            environment["PATH"] = createPathVariableValue()
-        }
-
-        return environment
-    }
-
-    private fun createPathVariableValue(): String {
-        val pathExtension = pathElements.joinToString(":")
-        val pathBase = System.getenv("PATH")
-
-        return "$pathExtension:$pathBase"
+        return createProcessEnvironment(exports, pathElements)
     }
 }

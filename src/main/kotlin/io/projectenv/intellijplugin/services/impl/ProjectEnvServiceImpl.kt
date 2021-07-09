@@ -9,6 +9,10 @@ import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import io.projectenv.core.cli.api.ToolInfo
 import io.projectenv.core.cli.api.ToolInfoParser
+import io.projectenv.core.commons.process.ProcessEnvironmentHelper
+import io.projectenv.core.commons.process.ProcessEnvironmentHelper.getPathVariableName
+import io.projectenv.core.commons.process.ProcessEnvironmentHelper.resolveExecutableFromPathElements
+import io.projectenv.core.commons.process.ProcessHelper
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import io.projectenv.intellijplugin.services.ProjectEnvException
@@ -17,9 +21,9 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.SystemUtils
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.nio.charset.StandardCharsets
 import java.util.Collections
-import java.util.concurrent.TimeUnit
+
+private const val PROJECT_ENV_CLI_NAME = "project-env-cli"
 
 class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
 
@@ -38,7 +42,7 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
             if (projectEnvCliExecutable == null || !projectEnvCliExecutable.exists()) {
                 NotificationGroupManager.getInstance().getNotificationGroup("Project-Env")
                     .createNotification(
-                        "Could not resolve Project-Env CLI. Please make sure that the CLI is installed and on PATH.",
+                        "Could not resolve Project-Env CLI. Please make sure that the CLI is installed and on ${getPathVariableName()}.",
                         NotificationType.WARNING
                     )
                     .notify(project)
@@ -59,42 +63,22 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
     }
 
     private fun getProjectEnvCliExecutable(): File? {
-        val projectEnvCliExecutableName = getProjectEnvCliExecutableName()
-        for (candidate in getProjectEnvCliExecutableLocationCandidates()) {
-            val projectEnvCliExecutable = File(candidate, projectEnvCliExecutableName)
-            if (projectEnvCliExecutable.exists()) {
-                return projectEnvCliExecutable
-            }
-        }
-
-        return null
+        return resolveExecutableFromPathElements(PROJECT_ENV_CLI_NAME, getProjectEnvCliExecutableLocationCandidates())
     }
 
-    private fun getProjectEnvCliExecutableLocationCandidates(): ArrayList<String> {
-        val candidates = ArrayList<String>()
-        candidates.addAll(getPathElements())
+    private fun getProjectEnvCliExecutableLocationCandidates(): ArrayList<File> {
+        val candidates = ArrayList<File>()
+        candidates.addAll(ProcessEnvironmentHelper.getPathElements())
         candidates.addAll(getKnownExecutableLocations())
 
         return candidates
     }
 
-    private fun getPathElements(): List<String> {
-        return System.getenv()["PATH"]?.split(File.pathSeparator).orEmpty()
-    }
-
-    private fun getKnownExecutableLocations(): List<String> {
+    private fun getKnownExecutableLocations(): List<File> {
         return if (!SystemUtils.IS_OS_WINDOWS) {
-            Collections.singletonList("/usr/local/bin")
+            Collections.singletonList(File("/usr/local/bin"))
         } else {
             Collections.emptyList()
-        }
-    }
-
-    private fun getProjectEnvCliExecutableName(): String {
-        return if (SystemUtils.IS_OS_WINDOWS) {
-            "project-env-cli.exe"
-        } else {
-            "project-env-cli"
         }
     }
 
@@ -114,7 +98,7 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
     }
 
     private fun executeProjectEnvCli(projectEnvCliExecutable: File, configurationFile: File): String {
-        val process = ProcessBuilder()
+        val processBuilder = ProcessBuilder()
             .command(
                 projectEnvCliExecutable.canonicalPath,
                 "--project-root",
@@ -123,17 +107,13 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
                 configurationFile.canonicalPath
             )
             .directory(projectRoot)
-            .start()
 
-        if (!process.waitFor(1, TimeUnit.HOURS)) {
-            process.destroy()
-        }
-
-        if (process.exitValue() != 0) {
+        val processResult = ProcessHelper.executeProcess(processBuilder, true)
+        if (processResult.exitCode != 0) {
             throw ProjectEnvException("failed to execute Project-Env CLI")
         }
 
-        return StringUtils.toEncodedString(process.inputStream.readAllBytes(), StandardCharsets.UTF_8)
+        return processResult.output.orElse(StringUtils.EMPTY)
     }
 
     private fun parseRawToolDetails(output: String): Map<String, List<ToolInfo>> {

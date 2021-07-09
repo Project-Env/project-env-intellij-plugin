@@ -3,17 +3,9 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
+- Fixed resolving Project-Env CLI on Windows
 
-### Security
 ## [3.0.2]
 ### Added
 - Try to resolve Project-Env CLI from directory `/usr/local/bin` if not resolvable through `PATH`.
