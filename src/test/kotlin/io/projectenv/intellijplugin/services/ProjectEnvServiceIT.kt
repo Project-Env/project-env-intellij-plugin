@@ -27,7 +27,7 @@ import java.io.FileOutputStream
 import java.net.URI
 import java.util.Map
 
-const val PROJECT_ENV_CLI_VERSION = "3.0.0"
+const val PROJECT_ENV_CLI_VERSION = "3.0.3"
 
 class ProjectEnvServiceIT : BasePlatformTestCase() {
 
