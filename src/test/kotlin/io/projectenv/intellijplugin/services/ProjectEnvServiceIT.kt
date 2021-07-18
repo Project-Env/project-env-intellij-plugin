@@ -7,7 +7,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.projectRoots.ProjectJdkTable
 import com.intellij.openapi.roots.ProjectRootManager
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.testFramework.HeavyPlatformTestCase
 import io.projectenv.core.commons.archive.ArchiveExtractorFactory
 import io.projectenv.core.commons.download.DownloadUrlSubstitutorFactory
 import io.projectenv.core.commons.download.ImmutableDownloadUrlDictionary
@@ -20,6 +20,8 @@ import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.idea.maven.project.MavenProjectsManager
+import org.jetbrains.plugins.gradle.service.project.open.linkAndRefreshGradleProject
+import org.jetbrains.plugins.gradle.settings.GradleSettings
 import org.junit.Test
 import java.io.BufferedInputStream
 import java.io.File
@@ -29,7 +31,7 @@ import java.util.Map
 
 const val PROJECT_ENV_CLI_VERSION = "3.0.3"
 
-class ProjectEnvServiceIT : BasePlatformTestCase() {
+class ProjectEnvServiceIT : HeavyPlatformTestCase() {
 
     private var tempDirectory: File? = null
 
@@ -45,18 +47,20 @@ class ProjectEnvServiceIT : BasePlatformTestCase() {
 
         withEnvironmentVariable(getPathVariableName(), createExtendedPathValue(pathElement)).execute {
             copyResourceToProjectRoot("project-env.toml")
+            copyResourceToProjectRoot("build.gradle")
 
-            val service = myFixture.project.service<ProjectEnvService>()
+            val service = project.service<ProjectEnvService>()
             service.refreshProjectEnv()
 
             assertMavenSettings()
             assertJdkSettings()
             assertNodeSettings()
+            assertGradleSettings()
         }
     }
 
     override fun tearDown() {
-        val jdk = ProjectRootManager.getInstance(myFixture.project).projectSdk
+        val jdk = ProjectRootManager.getInstance(project).projectSdk
         if (jdk != null) {
             ApplicationManager.getApplication().runWriteAction {
                 ProjectJdkTable.getInstance().removeJdk(jdk)
@@ -153,6 +157,16 @@ class ProjectEnvServiceIT : BasePlatformTestCase() {
         assertToolPath((interpreter as NodeJsLocalInterpreter).interpreterSystemDependentPath)
     }
 
+    private fun assertGradleSettings() {
+        linkAndRefreshGradleProject(getProjectRoot().canonicalPath, project)
+
+        val linkedProjectsSettings = GradleSettings.getInstance(project).linkedProjectsSettings
+        assertThat(linkedProjectsSettings).hasSize(1)
+
+        val projectSettings = linkedProjectsSettings.first()
+        assertToolPath(projectSettings.gradleHome)
+    }
+
     private fun assertToolPath(path: String?) {
         assertThat(path).startsWith(getProjectRoot().canonicalPath)
         assertThat(File(path!!)).exists()
@@ -180,6 +194,6 @@ class ProjectEnvServiceIT : BasePlatformTestCase() {
     }
 
     private fun getProjectRoot(): File {
-        return File(myFixture.project.basePath!!)
+        return File(project.basePath!!)
     }
 }
