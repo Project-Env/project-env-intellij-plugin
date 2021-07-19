@@ -66,6 +66,7 @@ jobs:
 
       # Run Sonar analysis
       - name: Sonar
+        if: ${{ github.actor != 'dependabot[bot]' }}
         run: gradle sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
