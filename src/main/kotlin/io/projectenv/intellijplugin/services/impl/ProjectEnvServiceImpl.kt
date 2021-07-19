@@ -1,6 +1,5 @@
 package io.projectenv.intellijplugin.services.impl
 
-import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
@@ -9,21 +8,17 @@ import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import io.projectenv.core.cli.api.ToolInfo
 import io.projectenv.core.cli.api.ToolInfoParser
-import io.projectenv.core.commons.process.ProcessEnvironmentHelper
 import io.projectenv.core.commons.process.ProcessEnvironmentHelper.getPathVariableName
-import io.projectenv.core.commons.process.ProcessEnvironmentHelper.resolveExecutableFromPathElements
 import io.projectenv.core.commons.process.ProcessHelper
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
+import io.projectenv.intellijplugin.services.ProjectEnvCliResolverService
 import io.projectenv.intellijplugin.services.ProjectEnvException
 import io.projectenv.intellijplugin.services.ProjectEnvService
 import org.apache.commons.lang3.StringUtils
-import org.apache.commons.lang3.SystemUtils
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.Collections
-
-private const val PROJECT_ENV_CLI_NAME = "project-env-cli"
 
 class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
 
@@ -38,14 +33,15 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
         val configurationFile = File(project.basePath, "project-env.toml")
         if (configurationFile.exists()) {
 
-            val projectEnvCliExecutable = getProjectEnvCliExecutable()
-            if (projectEnvCliExecutable == null || !projectEnvCliExecutable.exists()) {
-                NotificationGroupManager.getInstance().getNotificationGroup("Project-Env")
+            val projectEnvCliExecutable = project.service<ProjectEnvCliResolverService>().resolveCli()
+            if (projectEnvCliExecutable == null) {
+                getProjectEnvNotificationGroup()
                     .createNotification(
                         "Could not resolve Project-Env CLI. Please make sure that the CLI is installed and on ${getPathVariableName()}.",
                         NotificationType.WARNING
                     )
                     .notify(project)
+
                 return
             }
 
@@ -59,26 +55,6 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
                     configureTools(toolDetails)
                 }
             }
-        }
-    }
-
-    private fun getProjectEnvCliExecutable(): File? {
-        return resolveExecutableFromPathElements(PROJECT_ENV_CLI_NAME, getProjectEnvCliExecutableLocationCandidates())
-    }
-
-    private fun getProjectEnvCliExecutableLocationCandidates(): ArrayList<File> {
-        val candidates = ArrayList<File>()
-        candidates.addAll(ProcessEnvironmentHelper.getPathElements())
-        candidates.addAll(getKnownExecutableLocations())
-
-        return candidates
-    }
-
-    private fun getKnownExecutableLocations(): List<File> {
-        return if (!SystemUtils.IS_OS_WINDOWS) {
-            Collections.singletonList(File("/usr/local/bin"))
-        } else {
-            Collections.emptyList()
         }
     }
 

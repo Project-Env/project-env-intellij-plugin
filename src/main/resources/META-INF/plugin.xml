@@ -20,6 +20,9 @@
         <projectService
                 serviceInterface="io.projectenv.intellijplugin.services.ProjectEnvService"
                 serviceImplementation="io.projectenv.intellijplugin.services.impl.ProjectEnvServiceImpl"/>
+        <projectService
+                serviceInterface="io.projectenv.intellijplugin.services.ProjectEnvCliResolverService"
+                serviceImplementation="io.projectenv.intellijplugin.services.impl.ProjectEnvCliResolverServiceImpl"/>
         <notificationGroup id="Project-Env" displayType="BALLOON"/>
     </extensions>
 

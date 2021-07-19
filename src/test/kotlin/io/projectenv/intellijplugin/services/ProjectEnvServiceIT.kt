@@ -3,11 +3,15 @@ package io.projectenv.intellijplugin.services
 import com.github.stefanbirkner.systemlambda.SystemLambda.withEnvironmentVariable
 import com.intellij.javascript.nodejs.interpreter.NodeJsInterpreterManager
 import com.intellij.javascript.nodejs.interpreter.local.NodeJsLocalInterpreter
+import com.intellij.notification.NotificationGroup
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.projectRoots.ProjectJdkTable
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.testFramework.HeavyPlatformTestCase
+import com.intellij.testFramework.replaceService
 import io.projectenv.core.commons.archive.ArchiveExtractorFactory
 import io.projectenv.core.commons.download.DownloadUrlSubstitutorFactory
 import io.projectenv.core.commons.download.ImmutableDownloadUrlDictionary
@@ -15,6 +19,9 @@ import io.projectenv.core.commons.process.ProcessEnvironmentHelper.createExtende
 import io.projectenv.core.commons.process.ProcessEnvironmentHelper.getPathVariableName
 import io.projectenv.core.commons.system.CPUArchitecture
 import io.projectenv.core.commons.system.OperatingSystem
+import io.projectenv.intellijplugin.services.impl.PROJECT_ENV_NOTIFICATION_GROUP_NAME
+import io.projectenv.intellijplugin.services.impl.ProjectEnvCliResolverServiceImpl
+import io.projectenv.intellijplugin.services.impl.getProjectEnvNotificationGroup
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
@@ -23,6 +30,11 @@ import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.service.project.open.linkAndRefreshGradleProject
 import org.jetbrains.plugins.gradle.settings.GradleSettings
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -34,22 +46,42 @@ const val PROJECT_ENV_CLI_VERSION = "3.0.3"
 class ProjectEnvServiceIT : HeavyPlatformTestCase() {
 
     private var tempDirectory: File? = null
+    private var notificationGroup: NotificationGroup? = null
 
     override fun setUp() {
         super.setUp()
 
         tempDirectory = createTempDirectory()
+
+        notificationGroup = spy(getProjectEnvNotificationGroup())
+
+        val application = ApplicationManager.getApplication()
+        val notificationGroupManager = spy(application.getService(NotificationGroupManager::class.java))
+        whenever(notificationGroupManager.getNotificationGroup(PROJECT_ENV_NOTIFICATION_GROUP_NAME)).thenReturn(
+            notificationGroup
+        )
+        application.replaceService(NotificationGroupManager::class.java, notificationGroupManager, testRootDisposable)
     }
 
     @Test
     fun testRefreshProjectEnv() {
+        copyResourceToProjectRoot("project-env.toml")
+        copyResourceToProjectRoot("build.gradle")
+
+        val service = project.service<ProjectEnvService>()
+
+        // the first time Project-Env is refreshed, the CLI is not available and therefore are warning is shown
+        hideProjectEnvCli()
+        service.refreshProjectEnv()
+        verify(notificationGroup!!).createNotification(
+            anyString(),
+            eq(NotificationType.WARNING)
+        )
+
+        // the second time, the CLI is available and executed
+        unhideProjectEnvCli()
         val pathElement = setupProjectEnvCli()
-
         withEnvironmentVariable(getPathVariableName(), createExtendedPathValue(pathElement)).execute {
-            copyResourceToProjectRoot("project-env.toml")
-            copyResourceToProjectRoot("build.gradle")
-
-            val service = project.service<ProjectEnvService>()
             service.refreshProjectEnv()
 
             assertMavenSettings()
@@ -183,6 +215,27 @@ class ProjectEnvServiceIT : HeavyPlatformTestCase() {
         }
 
         return resultingFile
+    }
+
+    fun hideProjectEnvCli() {
+        project.replaceService(
+            ProjectEnvCliResolverService::class.java,
+            object : ProjectEnvCliResolverService {
+
+                override fun resolveCli(): File? {
+                    return null
+                }
+
+                override fun dispose() {
+                    // noop
+                }
+            },
+            project
+        )
+    }
+
+    fun unhideProjectEnvCli() {
+        project.replaceService(ProjectEnvCliResolverService::class.java, ProjectEnvCliResolverServiceImpl(), project)
     }
 
     fun createTempDirectory(suffix: String? = null, parent: File? = null): File {
