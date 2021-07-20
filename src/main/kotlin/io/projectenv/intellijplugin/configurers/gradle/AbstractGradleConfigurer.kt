@@ -11,7 +11,7 @@ import org.jetbrains.plugins.gradle.settings.GradleProjectSettings
 import org.jetbrains.plugins.gradle.settings.GradleSettings
 
 abstract class AbstractGradleConfigurer(val project: Project) : ToolConfigurer,
-        ExternalSystemSettingsListenerAdapter<GradleProjectSettings>() {
+    ExternalSystemSettingsListenerAdapter<GradleProjectSettings>() {
 
     private var toolInfo: ToolInfo? = null
 
@@ -47,5 +47,4 @@ abstract class AbstractGradleConfigurer(val project: Project) : ToolConfigurer,
     }
 
     protected abstract fun updateProjectConfiguration(toolInfo: ToolInfo, projectSettings: GradleProjectSettings)
-
 }

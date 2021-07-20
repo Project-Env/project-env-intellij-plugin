@@ -15,5 +15,4 @@ class GradleConfigurer(project: Project) : AbstractGradleConfigurer(project) {
         projectSettings.distributionType = DistributionType.LOCAL
         projectSettings.gradleHome = toolInfo.toolBinariesRoot.get().canonicalPath
     }
-
 }

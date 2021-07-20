@@ -14,5 +14,4 @@ class GradleJdkConfigurer(project: Project) : AbstractGradleConfigurer(project) 
     override fun updateProjectConfiguration(toolInfo: ToolInfo, projectSettings: GradleProjectSettings) {
         projectSettings.gradleJvm = ExternalSystemJdkUtil.USE_PROJECT_JDK
     }
-
 }
