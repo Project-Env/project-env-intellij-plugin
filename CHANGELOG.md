@@ -4,7 +4,7 @@
 
 ## [Unreleased]
 ### Added
-- Set Gradle JDK to project JDK if JDK was installed through Project-Env.
+- Set Gradle JDK to project JDK if it was installed through Project-Env.
 
 ### Changed
 - Update Gradle project settings even if the project was added before running the plugin.
