@@ -30,7 +30,7 @@ repositories {
     jcenter()
     maven {
         name = "github"
-        url = uri("https://maven.pkg.github.com/Project-Env/project-env-core")
+        url = uri("https://maven.pkg.github.com/Project-Env/project-env-cli")
         credentials(PasswordCredentials::class)
     }
 }

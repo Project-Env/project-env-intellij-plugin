@@ -4,8 +4,10 @@
 
 ## [Unreleased]
 ### Added
+- Set Gradle JDK to project JDK if JDK was installed through Project-Env.
 
 ### Changed
+- Update Gradle project settings even if the project was added before running the plugin.
 
 ### Deprecated
 
@@ -16,7 +18,7 @@
 ### Security
 ## [3.0.3]
 ### Fixed
-- Fixed resolving Project-Env CLI on Windows
+- Fixed resolving Project-Env CLI on Windows.
 
 ## [3.0.2]
 ### Added

@@ -5,6 +5,8 @@
     <extensions defaultExtensionNs="ch.repolevedavaj.projectenv.intellijplugin">
         <toolConfigurer
                 implementation="io.projectenv.intellijplugin.configurers.gradle.GradleConfigurer"/>
+        <toolConfigurer
+                implementation="io.projectenv.intellijplugin.configurers.gradle.GradleJdkConfigurer"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.externalSystem">
