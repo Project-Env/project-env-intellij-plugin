@@ -3,6 +3,7 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
+## [3.1.0]
 ### Added
 - Set Gradle JDK to project JDK if it was installed through Project-Env.
 
