@@ -27,7 +27,6 @@ version = properties("pluginVersion")
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
     maven {
         name = "github"
         url = uri("https://maven.pkg.github.com/Project-Env/project-env-cli")
