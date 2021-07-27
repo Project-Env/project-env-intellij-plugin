@@ -3,6 +3,9 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
+### Changed
+- Added support for IntelliJ 2021.2.X
+
 ## [3.1.0]
 ### Added
 - Set Gradle JDK to project JDK if it was installed through Project-Env.
