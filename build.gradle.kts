@@ -44,7 +44,7 @@ dependencies {
 
     testImplementation("org.assertj:assertj-core:3.20.2")
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.0")
-    testImplementation("org.mockito:mockito-core:3.12.1")
+    testImplementation("org.mockito:mockito-core:3.12.3")
     testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 }
 
