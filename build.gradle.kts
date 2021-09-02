@@ -35,16 +35,17 @@ repositories {
 }
 
 dependencies {
-    val projectEnvCliVersion = "3.0.3"
+    val projectEnvCliVersion = "3.2.0"
 
     implementation("io.projectenv.core:cli-api:$projectEnvCliVersion")
     implementation("io.projectenv.core.commons:process:$projectEnvCliVersion")
     testImplementation("io.projectenv.core.commons:archive:$projectEnvCliVersion")
     testImplementation("io.projectenv.core.commons:string-substitutor:$projectEnvCliVersion")
 
+    implementation("io.sentry:sentry:5.1.2")
+
     testImplementation("org.assertj:assertj-core:3.20.2")
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.0")
-    testImplementation("org.mockito:mockito-core:3.12.4")
     testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 }
 
@@ -82,14 +83,15 @@ jacoco {
 }
 
 tasks {
-
-    withType<JavaCompile> {
-        sourceCompatibility = "11"
-        targetCompatibility = "11"
-    }
-
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "11"
+// Set the JVM compatibility versions
+    properties("javaVersion").let {
+        withType<JavaCompile> {
+            sourceCompatibility = it
+            targetCompatibility = it
+        }
+        withType<KotlinCompile> {
+            kotlinOptions.jvmTarget = it
+        }
     }
 
     jacocoTestReport {
@@ -110,7 +112,7 @@ tasks {
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription.set(
-            File(projectDir, "README.md").readText().lines().run {
+            projectDir.resolve("README.md").readText().lines().run {
                 val start = "<!-- Plugin description -->"
                 val end = "<!-- Plugin description end -->"
 
@@ -122,7 +124,13 @@ tasks {
         )
 
         // Get the latest available change notes from the changelog file
-        changeNotes.set(provider { changelog.getLatest().toHTML() })
+        changeNotes.set(
+            provider {
+                changelog.run {
+                    getOrNull(properties("pluginVersion")) ?: getLatest()
+                }.toHTML()
+            }
+        )
     }
 
     runPluginVerifier {

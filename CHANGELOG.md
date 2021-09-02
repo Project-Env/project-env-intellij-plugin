@@ -4,16 +4,8 @@
 
 ## [Unreleased]
 ### Added
+- Added Sentry.io error reporting
 
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 ## [3.1.1]
 ### Changed
 - Added support for IntelliJ 2021.2.X

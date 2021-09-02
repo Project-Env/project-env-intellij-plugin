@@ -7,11 +7,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
 
       # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       # Cache Gradle dependencies
       - name: Setup Gradle Dependencies Cache
@@ -30,7 +34,7 @@ jobs:
       # Setup tools for the next steps
       - uses: Project-Env/project-env-github-action@v1.0.0
         with:
-          cli-version: '3.0.4'
+          cli-version: '3.2.0'
 
       - run: |
           echo "ORG_GRADLE_PROJECT_githubUsername=${{ github.actor }}" >> $GITHUB_ENV
@@ -52,7 +56,7 @@ jobs:
         run: gradle check
 
       # Run verifyPlugin Gradle task
-      - name: Verify Plugin
+      - name: Verify Plugin Completeness
         run: gradle verifyPlugin
 
       # Build artifact using buildPlugin Gradle task
@@ -60,7 +64,7 @@ jobs:
         run: gradle buildPlugin
 
       # Run IntelliJ Plugin Verifier action using GitHub Action
-      - name: Verify Plugin
+      - name: Verify Binary Compatibility
         run: gradle runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
 
       # Run Sonar analysis

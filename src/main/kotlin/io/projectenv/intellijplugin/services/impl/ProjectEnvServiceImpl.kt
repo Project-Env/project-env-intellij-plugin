@@ -89,7 +89,7 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
             throw ProjectEnvException("failed to execute Project-Env CLI")
         }
 
-        return processResult.output.orElse(StringUtils.EMPTY)
+        return processResult.stdOutput.orElse(StringUtils.EMPTY)
     }
 
     private fun parseRawToolDetails(output: String): Map<String, List<ToolInfo>> {
