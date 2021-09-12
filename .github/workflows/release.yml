@@ -37,7 +37,7 @@ jobs:
       # Setup tools for the next steps
       - uses: Project-Env/project-env-github-action@v1.0.0
         with:
-          cli-version: '3.0.4'
+          cli-version: '3.2.0'
 
       - run: |
           echo "ORG_GRADLE_PROJECT_githubUsername=${{ github.actor }}" >> $GITHUB_ENV
@@ -117,5 +117,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          branch: master
+          branch: main
           github_token: ${{ secrets.GITHUB_TOKEN }}
