@@ -4,6 +4,19 @@
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [3.2.0]
+### Added
 - Added Sentry.io error reporting
 - Show notification in case of Project-Env CLI error
 
@@ -32,7 +45,7 @@
 
 ## [3.0.0]
 ### Changed
-- Refactored the plugin, so it uses the installed Project-Env Core CLI to install and manage the required tools. 
+- Refactored the plugin, so it uses the installed Project-Env Core CLI to install and manage the required tools.
 
 ## [2.2.0]
 ### Changed
@@ -81,4 +94,4 @@
 ## [0.0.1]
 ### Added
 - Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
-- Initial implementation of the setup and configuration of tools, declared in the `project-env.yml` 
+- Initial implementation of the setup and configuration of tools, declared in the `project-env.yml`
