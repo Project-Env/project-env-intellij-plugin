@@ -50,7 +50,6 @@ jobs:
         run: |
           PROPERTIES="$(gradle properties --console=plain -q)"
           NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
-          IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^pluginVerifierIdeVersions:" | base64)"
           CHANGELOG="$(gradle getChangelog --unreleased --no-header --console=plain -q)"
           CHANGELOG="${CHANGELOG//'%'/'%25'}"
           CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
@@ -58,7 +57,6 @@ jobs:
           ARTIFACT="${NAME}-${{ github.event.inputs.version }}.zip"
 
           echo "::set-output name=ideVersions::$IDE_VERSIONS"
-          echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
           echo "::set-output name=changelog::$CHANGELOG"
           echo "::set-output name=artifact::$ARTIFACT"
 
@@ -76,7 +74,7 @@ jobs:
 
       # Run IntelliJ Plugin Verifier action using GitHub Action
       - name: Verify Binary Compatibility
-        run: gradle runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }} -PpluginVersion=${{ github.event.inputs.version }}
+        run: gradle runPluginVerifier -Pplugin.verifier.home.dir=~/.pluginVerifier -PpluginVersion=${{ github.event.inputs.version }}
 
       # Create Github release
       - name: Create Release
