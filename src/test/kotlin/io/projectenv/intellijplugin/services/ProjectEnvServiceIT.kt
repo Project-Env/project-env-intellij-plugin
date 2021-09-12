@@ -30,7 +30,7 @@ import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.service.project.open.linkAndRefreshGradleProject
 import org.jetbrains.plugins.gradle.settings.GradleSettings
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyString
+import org.mockito.ArgumentMatchers.startsWith
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
@@ -64,7 +64,7 @@ class ProjectEnvServiceIT : HeavyPlatformTestCase() {
 
     @Test
     fun testRefreshProjectEnv() {
-        copyResourceToProjectRoot("project-env.toml")
+        copyResourceToProjectRoot("invalid-project-env.toml", "project-env.toml")
         copyResourceToProjectRoot("build.gradle")
 
         val service = project.service<ProjectEnvService>()
@@ -73,13 +73,24 @@ class ProjectEnvServiceIT : HeavyPlatformTestCase() {
         hideProjectEnvCli()
         service.refreshProjectEnv()
         verify(notificationGroup!!).createNotification(
-            anyString(),
+            startsWith("Could not resolve Project-Env CLI"),
             eq(NotificationType.WARNING)
         )
 
-        // the second time, the CLI is available and executed
+        // the second time, the CLI is available and executed, but the project-env.toml is invalid
         unhideProjectEnvCli()
         val pathElement = setupProjectEnvCli()
+        withEnvironmentVariable(getPathVariableName(), createExtendedPathValue(pathElement)).execute {
+            service.refreshProjectEnv()
+
+            verify(notificationGroup!!).createNotification(
+                startsWith("Failed to execute Project-Env CLI"),
+                eq(NotificationType.WARNING)
+            )
+        }
+
+        // third time, the project-env.toml is valid
+        copyResourceToProjectRoot("project-env.toml")
         withEnvironmentVariable(getPathVariableName(), createExtendedPathValue(pathElement)).execute {
             service.refreshProjectEnv()
 
@@ -203,8 +214,8 @@ class ProjectEnvServiceIT : HeavyPlatformTestCase() {
         assertThat(File(path!!)).exists()
     }
 
-    private fun copyResourceToProjectRoot(resource: String): File {
-        val resultingFile = File(getProjectRoot(), resource)
+    private fun copyResourceToProjectRoot(resource: String, target: String? = null): File {
+        val resultingFile = File(getProjectRoot(), target ?: resource)
         FileUtils.forceMkdirParent(resultingFile)
 
         javaClass.getResourceAsStream(resource).use { inputStream ->

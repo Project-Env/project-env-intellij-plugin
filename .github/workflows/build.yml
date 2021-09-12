@@ -28,8 +28,8 @@ jobs:
       - name: Setup Plugin Verifier IDEs Cache
         uses: actions/cache@v2
         with:
-          path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
-          key: ${{ runner.os }}-plugin-verifier-${{ steps.properties.outputs.ideVersions }}
+          path: ~/.pluginVerifier/ides
+          key: ${{ runner.os }}-plugin-verifier-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
       # Setup tools for the next steps
       - uses: Project-Env/project-env-github-action@v1.0.0
@@ -39,17 +39,6 @@ jobs:
       - run: |
           echo "ORG_GRADLE_PROJECT_githubUsername=${{ github.actor }}" >> $GITHUB_ENV
           echo "ORG_GRADLE_PROJECT_githubPassword=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-
-      # Set environment variables
-      - name: Export Properties
-        id: properties
-        shell: bash
-        run: |
-          PROPERTIES="$(gradle properties --console=plain -q)"
-          IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^pluginVerifierIdeVersions:" | base64)"
-
-          echo "::set-output name=ideVersions::$IDE_VERSIONS"
-          echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
 
       # Run detekt, ktlint and tests
       - name: Run Linters and Test
@@ -65,7 +54,7 @@ jobs:
 
       # Run IntelliJ Plugin Verifier action using GitHub Action
       - name: Verify Binary Compatibility
-        run: gradle runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
+        run: gradle runPluginVerifier -Pplugin.verifier.home.dir=~/.pluginVerifier
 
       # Run Sonar analysis
       - name: Sonar

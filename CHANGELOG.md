@@ -5,6 +5,7 @@
 ## [Unreleased]
 ### Added
 - Added Sentry.io error reporting
+- Show notification in case of Project-Env CLI error
 
 ## [3.1.1]
 ### Changed
