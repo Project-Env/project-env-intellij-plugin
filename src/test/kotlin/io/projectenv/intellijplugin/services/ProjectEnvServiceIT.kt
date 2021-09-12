@@ -39,7 +39,6 @@ import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
-import java.util.Map
 
 const val PROJECT_ENV_CLI_VERSION = "3.0.3"
 
@@ -120,24 +119,24 @@ class ProjectEnvServiceIT : HeavyPlatformTestCase() {
             .putParameters("VERSION", PROJECT_ENV_CLI_VERSION)
             .putOperatingSystemSpecificParameters(
                 "OS",
-                Map.of(
-                    OperatingSystem.MACOS, "macos",
-                    OperatingSystem.LINUX, "linux",
-                    OperatingSystem.WINDOWS, "windows"
+                mapOf(
+                    OperatingSystem.MACOS to "macos",
+                    OperatingSystem.LINUX to "linux",
+                    OperatingSystem.WINDOWS to "windows"
                 )
             )
             .putOperatingSystemSpecificParameters(
                 "FILE_EXT",
-                Map.of(
-                    OperatingSystem.MACOS, "tar.gz",
-                    OperatingSystem.LINUX, "tar.gz",
-                    OperatingSystem.WINDOWS, "zip"
+                mapOf(
+                    OperatingSystem.MACOS to "tar.gz",
+                    OperatingSystem.LINUX to "tar.gz",
+                    OperatingSystem.WINDOWS to "zip"
                 )
             )
             .putCPUArchitectureSpecificParameters(
                 "CPU_ARCH",
-                Map.of(
-                    CPUArchitecture.X64, "amd64"
+                mapOf(
+                    CPUArchitecture.X64 to "amd64"
                 )
             )
             .build()
@@ -217,7 +216,7 @@ class ProjectEnvServiceIT : HeavyPlatformTestCase() {
         return resultingFile
     }
 
-    fun hideProjectEnvCli() {
+    private fun hideProjectEnvCli() {
         project.replaceService(
             ProjectEnvCliResolverService::class.java,
             object : ProjectEnvCliResolverService {
@@ -234,11 +233,11 @@ class ProjectEnvServiceIT : HeavyPlatformTestCase() {
         )
     }
 
-    fun unhideProjectEnvCli() {
+    private fun unhideProjectEnvCli() {
         project.replaceService(ProjectEnvCliResolverService::class.java, ProjectEnvCliResolverServiceImpl(), project)
     }
 
-    fun createTempDirectory(suffix: String? = null, parent: File? = null): File {
+    private fun createTempDirectory(suffix: String? = null, parent: File? = null): File {
         val temporaryFolder = File.createTempFile("junit", suffix, parent)
         assertThat(temporaryFolder.delete()).isTrue()
         FileUtils.forceMkdir(temporaryFolder)

@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
 
       # Check out current repository
@@ -29,8 +31,8 @@ jobs:
       - name: Setup Plugin Verifier IDEs Cache
         uses: actions/cache@v2
         with:
-          path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
-          key: ${{ runner.os }}-plugin-verifier-${{ steps.properties.outputs.ideVersions }}
+          path: ~/.pluginVerifier/ides
+          key: ${{ runner.os }}-plugin-verifier-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
       # Setup tools for the next steps
       - uses: Project-Env/project-env-github-action@v1.0.0
@@ -65,7 +67,7 @@ jobs:
         run: gradle check -PpluginVersion=${{ github.event.inputs.version }}
 
       # Run verifyPlugin Gradle task
-      - name: Verify Plugin
+      - name: Verify Plugin Completeness
         run: gradle verifyPlugin -PpluginVersion=${{ github.event.inputs.version }}
 
       # Build artifact using buildPlugin Gradle task
@@ -73,7 +75,7 @@ jobs:
         run: gradle buildPlugin -PpluginVersion=${{ github.event.inputs.version }}
 
       # Run IntelliJ Plugin Verifier action using GitHub Action
-      - name: Verify Plugin
+      - name: Verify Binary Compatibility
         run: gradle runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }} -PpluginVersion=${{ github.event.inputs.version }}
 
       # Create Github release
