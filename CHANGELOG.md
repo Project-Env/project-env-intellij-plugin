@@ -3,6 +3,19 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [3.2.1]
 ### Removed
 - Removed support for IntelliJ versions 2020.3.X and 2021.1.X
 
