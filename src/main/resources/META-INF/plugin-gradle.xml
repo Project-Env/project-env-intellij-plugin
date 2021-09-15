@@ -10,7 +10,7 @@
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.externalSystem">
-        <runConfigurationExtension
+        <runConfigurationEx
                 implementation="io.projectenv.intellijplugin.configurers.gradle.GradleRunConfigurationExtension"/>
     </extensions>
 
