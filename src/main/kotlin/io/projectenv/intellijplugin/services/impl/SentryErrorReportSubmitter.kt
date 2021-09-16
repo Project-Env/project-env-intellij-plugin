@@ -12,6 +12,7 @@ import io.sentry.SentryLevel
 import io.sentry.UserFeedback
 import io.sentry.protocol.Message
 import io.sentry.protocol.SentryId
+import org.apache.commons.lang.StringUtils
 import java.awt.Component
 
 class SentryErrorReportSubmitter : ErrorReportSubmitter() {
@@ -76,9 +77,11 @@ class SentryErrorReportSubmitter : ErrorReportSubmitter() {
     }
 
     private fun captureUserFeedback(sentryEventId: SentryId, additionalInfo: String?) {
-        val sentryUserFeedback = UserFeedback(sentryEventId)
-        sentryUserFeedback.comments = additionalInfo
+        if (StringUtils.isNotEmpty(additionalInfo)) {
+            val sentryUserFeedback = UserFeedback(sentryEventId)
+            sentryUserFeedback.comments = additionalInfo
 
-        Sentry.captureUserFeedback(sentryUserFeedback)
+            Sentry.captureUserFeedback(sentryUserFeedback)
+        }
     }
 }

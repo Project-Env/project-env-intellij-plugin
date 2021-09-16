@@ -5,6 +5,7 @@
 ## [Unreleased]
 ### Fixed
 - Fixed name of Gradle extension point which is responsible to set Project-Env environment variables during Gradle execution.
+- Do not upload empty user feedback to Sentry.io.
 
 ## [3.2.1]
 ### Removed
