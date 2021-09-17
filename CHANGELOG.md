@@ -3,6 +3,19 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [3.2.2]
 ### Fixed
 - Fixed name of Gradle extension point which is responsible to set Project-Env environment variables during Gradle execution.
 - Do not upload empty user feedback to Sentry.io.
