@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 ### Added
+- Set Maven importer JDK to project JDK
 
 ### Changed
 
