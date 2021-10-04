@@ -34,7 +34,7 @@ class JdkConfigurer(val project: Project) : ToolConfigurer {
     }
 
     private fun createNewJdk(toolInfo: ToolInfo, jdkName: String) {
-        val newJdk = JavaSdk.getInstance().createJdk(jdkName, toolInfo.toolBinariesRoot.get().canonicalPath)
+        val newJdk = JavaSdk.getInstance().createJdk(jdkName, toolInfo.toolBinariesRoot.get().canonicalPath, false)
         ProjectJdkTable.getInstance().addJdk(newJdk)
         ProjectRootManager.getInstance(project).projectSdk = newJdk
     }

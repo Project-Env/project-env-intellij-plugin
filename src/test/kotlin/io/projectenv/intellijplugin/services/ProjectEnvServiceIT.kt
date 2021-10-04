@@ -9,6 +9,8 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.projectRoots.ProjectJdkTable
+import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl
+import com.intellij.openapi.roots.OrderRootType
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.testFramework.HeavyPlatformTestCase
 import com.intellij.testFramework.replaceService
@@ -26,6 +28,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.idea.maven.execution.MavenRunnerSettings
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.service.project.open.linkAndRefreshGradleProject
 import org.jetbrains.plugins.gradle.settings.GradleSettings
@@ -40,7 +43,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
 
-const val PROJECT_ENV_CLI_VERSION = "3.0.3"
+const val PROJECT_ENV_CLI_VERSION = "3.2.0"
 
 class ProjectEnvServiceIT : HeavyPlatformTestCase() {
 
@@ -190,7 +193,11 @@ class ProjectEnvServiceIT : HeavyPlatformTestCase() {
     }
 
     private fun assertJdkSettings() {
-        assertToolPath(ProjectRootManager.getInstance(project).projectSdk?.homePath)
+        val jdk = ProjectRootManager.getInstance(project).projectSdk as ProjectJdkImpl
+        assertToolPath(jdk.homePath)
+        assertThat(jdk.getUrls(OrderRootType.CLASSES)).hasSize(77)
+        assertThat(MavenProjectsManager.getInstance(project).importingSettings.jdkForImporter)
+            .isEqualTo(MavenRunnerSettings.USE_PROJECT_JDK)
     }
 
     private fun assertNodeSettings() {
@@ -210,8 +217,12 @@ class ProjectEnvServiceIT : HeavyPlatformTestCase() {
     }
 
     private fun assertToolPath(path: String?) {
-        assertThat(path).startsWith(getProjectRoot().canonicalPath)
+        assertThat(normalizePath(path)).startsWith(normalizePath(getProjectRoot().canonicalPath))
         assertThat(File(path!!)).exists()
+    }
+
+    private fun normalizePath(path: String?): String? {
+        return path?.replace('\\', '/')
     }
 
     private fun copyResourceToProjectRoot(resource: String, target: String? = null): File {

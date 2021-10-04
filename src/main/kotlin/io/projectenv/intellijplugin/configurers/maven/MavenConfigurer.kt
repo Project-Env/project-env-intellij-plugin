@@ -7,7 +7,6 @@ import io.projectenv.core.cli.api.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import org.jetbrains.idea.maven.execution.MavenRunner
-import org.jetbrains.idea.maven.execution.MavenRunnerSettings
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 
 class MavenConfigurer(val project: Project) : ToolConfigurer {
@@ -25,8 +24,6 @@ class MavenConfigurer(val project: Project) : ToolConfigurer {
             if (userSettingsFile != null) {
                 settings.generalSettings.setUserSettingsFile(userSettingsFile.canonicalPath)
             }
-
-            settings.importingSettings.jdkForImporter = MavenRunnerSettings.USE_PROJECT_JDK
 
             val environment = project.service<ExecutionEnvironmentService>().createEnvironment()
             MavenRunner.getInstance(project).settings.environmentProperties.putAll(environment)

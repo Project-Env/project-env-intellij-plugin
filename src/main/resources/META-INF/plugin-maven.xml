@@ -3,6 +3,8 @@
     <extensions defaultExtensionNs="ch.repolevedavaj.projectenv.intellijplugin">
         <toolConfigurer
                 implementation="io.projectenv.intellijplugin.configurers.maven.MavenConfigurer"/>
+        <toolConfigurer
+                implementation="io.projectenv.intellijplugin.configurers.maven.MavenImporterJdkConfigurer"/>
     </extensions>
 
 </idea-plugin>

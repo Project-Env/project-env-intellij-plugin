@@ -4,17 +4,10 @@
 
 ## [Unreleased]
 ### Added
-- Set Maven importer JDK to project JDK
-
-### Changed
-
-### Deprecated
-
-### Removed
+- Set Maven importer JDK to project JDK if it was configured through Project-Env.
 
 ### Fixed
-
-### Security
+- Configure JDK really as JDK instead as JRE.
 
 ## [3.2.2]
 ### Fixed
