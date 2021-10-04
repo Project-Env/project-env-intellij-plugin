@@ -4,6 +4,19 @@
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [3.3.0]
+### Added
 - Set Maven importer JDK to project JDK if it was configured through Project-Env.
 
 ### Fixed
