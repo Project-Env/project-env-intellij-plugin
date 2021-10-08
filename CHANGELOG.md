@@ -4,16 +4,7 @@
 
 ## [Unreleased]
 ### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
+- Added support for IntelliJ 2021.3.X
 
 ## [3.3.0]
 ### Added
