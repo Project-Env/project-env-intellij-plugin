@@ -4,6 +4,19 @@
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [3.3.1]
+### Added
 - Added support for IntelliJ 2021.3.X
 
 ## [3.3.0]
