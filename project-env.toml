@@ -1,9 +1,8 @@
 tools_directory = ".tools"
 
 [jdk]
-java_version = "11"
-distribution = "Adoptium"
-distribution_version = "11.0.12+7"
+distribution = "Temurin"
+distribution_version = "11.0.13+8"
 
 [gradle]
 version = "7.2"
