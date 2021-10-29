@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    val projectEnvCliVersion = "3.2.0"
+    val projectEnvCliVersion = "3.3.0"
 
     implementation("io.projectenv.core:cli-api:$projectEnvCliVersion")
     implementation("io.projectenv.core.commons:process:$projectEnvCliVersion")
