@@ -5,7 +5,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.projectRoots.JavaSdk
 import com.intellij.openapi.projectRoots.ProjectJdkTable
 import com.intellij.openapi.roots.ProjectRootManager
-import io.projectenv.core.cli.api.ToolInfo
+import io.projectenv.intellijplugin.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 
 class JdkConfigurer(val project: Project) : ToolConfigurer {
@@ -34,7 +34,7 @@ class JdkConfigurer(val project: Project) : ToolConfigurer {
     }
 
     private fun createNewJdk(toolInfo: ToolInfo, jdkName: String) {
-        val newJdk = JavaSdk.getInstance().createJdk(jdkName, toolInfo.toolBinariesRoot.get().canonicalPath, false)
+        val newJdk = JavaSdk.getInstance().createJdk(jdkName, toolInfo.toolBinariesRoot!!.canonicalPath, false)
         ProjectJdkTable.getInstance().addJdk(newJdk)
         ProjectRootManager.getInstance(project).projectSdk = newJdk
     }

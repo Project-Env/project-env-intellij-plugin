@@ -29,18 +29,18 @@ repositories {
     mavenCentral()
     maven {
         name = "github"
-        url = uri("https://maven.pkg.github.com/Project-Env/project-env-cli")
+        url = uri("https://maven.pkg.github.com/Project-Env/project-env-commons-java")
         credentials(PasswordCredentials::class)
     }
 }
 
 dependencies {
-    val projectEnvCliVersion = "3.3.0"
+    val projectEnvCommonsVersion = "1.1.0"
 
-    implementation("io.projectenv.core:cli-api:$projectEnvCliVersion")
-    implementation("io.projectenv.core.commons:process:$projectEnvCliVersion")
-    testImplementation("io.projectenv.core.commons:archive:$projectEnvCliVersion")
-    testImplementation("io.projectenv.core.commons:string-substitutor:$projectEnvCliVersion")
+    implementation("io.projectenv.commons:process:$projectEnvCommonsVersion")
+    implementation("io.projectenv.commons:gson:$projectEnvCommonsVersion")
+    testImplementation("io.projectenv.commons:archive:$projectEnvCommonsVersion")
+    testImplementation("io.projectenv.commons:string-substitutor:$projectEnvCommonsVersion")
 
     implementation("io.sentry:sentry:5.3.0")
 

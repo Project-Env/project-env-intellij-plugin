@@ -2,7 +2,7 @@ package io.projectenv.intellijplugin.configurers.maven
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
-import io.projectenv.core.cli.api.ToolInfo
+import io.projectenv.intellijplugin.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import org.jetbrains.idea.maven.execution.MavenRunnerSettings
 import org.jetbrains.idea.maven.project.MavenProjectsManager
