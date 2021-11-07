@@ -3,7 +3,7 @@ package io.projectenv.intellijplugin.configurers.maven
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import io.projectenv.core.cli.api.ToolInfo
+import io.projectenv.intellijplugin.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import org.jetbrains.idea.maven.execution.MavenRunner
@@ -18,7 +18,7 @@ class MavenConfigurer(val project: Project) : ToolConfigurer {
     override fun configureTool(toolInfo: ToolInfo) {
         ApplicationManager.getApplication().runWriteAction {
             val settings = MavenProjectsManager.getInstance(project)
-            settings.generalSettings.mavenHome = toolInfo.toolBinariesRoot.get().canonicalPath
+            settings.generalSettings.mavenHome = toolInfo.toolBinariesRoot!!.canonicalPath
 
             val userSettingsFile = toolInfo.unhandledProjectResources.get("userSettingsFile")
             if (userSettingsFile != null) {

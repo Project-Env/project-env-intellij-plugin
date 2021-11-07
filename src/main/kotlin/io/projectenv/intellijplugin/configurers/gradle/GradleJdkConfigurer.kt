@@ -2,7 +2,7 @@ package io.projectenv.intellijplugin.configurers.gradle
 
 import com.intellij.openapi.externalSystem.service.execution.ExternalSystemJdkUtil
 import com.intellij.openapi.project.Project
-import io.projectenv.core.cli.api.ToolInfo
+import io.projectenv.intellijplugin.ToolInfo
 import org.jetbrains.plugins.gradle.settings.GradleProjectSettings
 
 class GradleJdkConfigurer(project: Project) : AbstractGradleConfigurer(project) {

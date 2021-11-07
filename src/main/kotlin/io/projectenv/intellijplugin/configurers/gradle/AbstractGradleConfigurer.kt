@@ -4,7 +4,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.externalSystem.settings.ExternalSystemSettingsListenerAdapter
 import com.intellij.openapi.project.Project
-import io.projectenv.core.cli.api.ToolInfo
+import io.projectenv.intellijplugin.ToolInfo
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import io.projectenv.intellijplugin.services.ProjectEnvService
 import org.jetbrains.plugins.gradle.settings.GradleProjectSettings

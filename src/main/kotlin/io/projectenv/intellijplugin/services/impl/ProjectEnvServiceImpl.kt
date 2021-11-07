@@ -6,11 +6,11 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.extensions.ProjectExtensionPointName
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
-import io.projectenv.core.cli.api.ToolInfo
-import io.projectenv.core.cli.api.ToolInfoParser
 import io.projectenv.core.commons.process.ProcessEnvironmentHelper.getPathVariableName
 import io.projectenv.core.commons.process.ProcessHelper
 import io.projectenv.core.commons.process.ProcessResult
+import io.projectenv.intellijplugin.ToolInfo
+import io.projectenv.intellijplugin.ToolInfoParser
 import io.projectenv.intellijplugin.configurers.ToolConfigurer
 import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
 import io.projectenv.intellijplugin.services.ProjectEnvCliResolverService
