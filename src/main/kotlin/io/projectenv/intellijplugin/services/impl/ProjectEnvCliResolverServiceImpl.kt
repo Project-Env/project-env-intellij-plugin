@@ -6,13 +6,11 @@ import org.apache.commons.lang3.SystemUtils
 import java.io.File
 import java.util.Collections
 
-private const val PROJECT_ENV_CLI_NAME = "project-env-cli"
-
 class ProjectEnvCliResolverServiceImpl : ProjectEnvCliResolverService {
 
     override fun resolveCli(): File? {
         return ProcessEnvironmentHelper.resolveExecutableFromPathElements(
-            PROJECT_ENV_CLI_NAME,
+            "project-env-cli",
             getProjectEnvCliExecutableLocationCandidates()
         )
     }

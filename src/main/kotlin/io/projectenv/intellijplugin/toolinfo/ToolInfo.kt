@@ -1,4 +1,4 @@
-package io.projectenv.intellijplugin
+package io.projectenv.intellijplugin.toolinfo
 
 import java.io.File
 

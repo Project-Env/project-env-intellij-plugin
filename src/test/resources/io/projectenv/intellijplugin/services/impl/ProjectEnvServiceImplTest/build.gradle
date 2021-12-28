@@ -1,3 +1,5 @@
+package io.projectenv.intellijplugin.services.impl.ProjectEnvServiceImplTest
+
 plugins {
     id 'java-library'
 }
