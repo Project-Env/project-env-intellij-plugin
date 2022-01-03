@@ -1,17 +1,8 @@
 <idea-plugin>
 
-    <depends>com.intellij.modules.externalSystem</depends>
-
-    <extensions defaultExtensionNs="ch.repolevedavaj.projectenv.intellijplugin">
-        <toolConfigurer
-                implementation="io.projectenv.intellijplugin.configurers.gradle.GradleConfigurer"/>
-        <toolConfigurer
-                implementation="io.projectenv.intellijplugin.configurers.gradle.GradleJdkConfigurer"/>
-    </extensions>
-
-    <extensions defaultExtensionNs="com.intellij.externalSystem">
-        <runConfigurationEx
-                implementation="io.projectenv.intellijplugin.configurers.gradle.GradleRunConfigurationExtension"/>
-    </extensions>
+    <projectListeners>
+        <listener class="io.projectenv.intellijplugin.listeners.GradleConfigurer"
+                  topic="io.projectenv.intellijplugin.listeners.ProjectEnvToolsListener"/>
+    </projectListeners>
 
 </idea-plugin>

@@ -1,0 +1,6 @@
+tools_directory = ".tools"
+
+[maven]
+version = "3.8.4"
+global_settings_file = "global-settings.xml"
+user_settings_file = "user-settings.xml"

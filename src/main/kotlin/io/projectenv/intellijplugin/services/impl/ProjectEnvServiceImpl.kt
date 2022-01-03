@@ -1,35 +1,27 @@
 package io.projectenv.intellijplugin.services.impl
 
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
-import com.intellij.openapi.extensions.ProjectExtensionPointName
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import io.projectenv.core.commons.process.ProcessEnvironmentHelper.getPathVariableName
 import io.projectenv.core.commons.process.ProcessHelper
 import io.projectenv.core.commons.process.ProcessResult
-import io.projectenv.intellijplugin.ToolInfo
-import io.projectenv.intellijplugin.ToolInfoParser
-import io.projectenv.intellijplugin.configurers.ToolConfigurer
-import io.projectenv.intellijplugin.services.ExecutionEnvironmentService
+import io.projectenv.intellijplugin.listeners.ProjectEnvTopics
+import io.projectenv.intellijplugin.notifications.ProjectEnvNotificationGroup
 import io.projectenv.intellijplugin.services.ProjectEnvCliResolverService
+import io.projectenv.intellijplugin.services.ProjectEnvConfigFileResolverService
 import io.projectenv.intellijplugin.services.ProjectEnvService
+import io.projectenv.intellijplugin.toolinfo.ToolInfoParser
+import io.projectenv.intellijplugin.toolinfo.ToolInfos
 import java.io.File
-import java.util.Collections
 
 class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
-
-    private val toolConfigurerExtensionPoint: ProjectExtensionPointName<ToolConfigurer> =
-        ProjectExtensionPointName("ch.repolevedavaj.projectenv.intellijplugin.toolConfigurer")
 
     private val projectRoot = File(project.basePath!!)
 
     override fun refreshProjectEnv() {
-        val configurationFile = File(project.basePath, "project-env.toml")
-        if (!configurationFile.exists()) {
-            return
-        }
+        val configurationFile = project.service<ProjectEnvConfigFileResolverService>().resolveConfig() ?: return
 
         val projectEnvCliExecutable = project.service<ProjectEnvCliResolverService>().resolveCli()
         if (projectEnvCliExecutable == null) {
@@ -48,12 +40,10 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
     }
 
     private fun handleMissingCli() {
-        getProjectEnvNotificationGroup()
-            .createNotification(
-                "Could not resolve Project-Env CLI. Please make sure that the CLI is installed and on ${getPathVariableName()}.",
-                NotificationType.WARNING
-            )
-            .notify(project)
+        ProjectEnvNotificationGroup.createNotification(
+            "Could not resolve Project-Env CLI. Please make sure that the CLI is installed and on ${getPathVariableName()}.",
+            NotificationType.WARNING
+        ).notify(project)
     }
 
     private fun runProcess(title: String, runnable: Runnable) {
@@ -88,43 +78,15 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
     private fun handleSuccessfulCliExecution(result: ProcessResult) {
         val toolDetails = parseRawToolDetails(result)
 
-        configureExecutionEnvironment(toolDetails)
-
-        ApplicationManager.getApplication().invokeLater {
-            configureTools(toolDetails)
-        }
+        project.messageBus.syncPublisher(ProjectEnvTopics.TOOLS_TOPIC).toolsUpdated(toolDetails)
     }
 
-    private fun parseRawToolDetails(result: ProcessResult): Map<String, List<ToolInfo>> {
+    private fun parseRawToolDetails(result: ProcessResult): ToolInfos {
         return ToolInfoParser.fromJson(result.stdOutput.get())
     }
 
-    private fun configureExecutionEnvironment(toolInfos: Map<String, List<ToolInfo>>) {
-        val executionEnvironmentService = project.service<ExecutionEnvironmentService>()
-        executionEnvironmentService.clear()
-
-        for (toolInfoEntry in toolInfos.entries) {
-            for (toolInfo in toolInfoEntry.value) {
-                for (export in toolInfo.environmentVariables) {
-                    executionEnvironmentService.registerExport(export.key, export.value)
-                }
-                for (pathElement in toolInfo.pathElements) {
-                    executionEnvironmentService.registerPathElement(pathElement)
-                }
-            }
-        }
-    }
-
-    private fun configureTools(toolInfos: Map<String, List<ToolInfo>>) {
-        for (toolConfigurer in toolConfigurerExtensionPoint.extensions(project)) {
-            for (toolInfo in toolInfos.getOrDefault(toolConfigurer.getToolIdentifier(), Collections.emptyList())) {
-                toolConfigurer.configureTool(toolInfo)
-            }
-        }
-    }
-
     private fun handleCliExecutionFailure(result: ProcessResult) {
-        getProjectEnvNotificationGroup()
+        ProjectEnvNotificationGroup
             .createNotification(
                 "Failed to execute Project-Env CLI. See process output for more details:\n${result.errOutput.get()}",
                 NotificationType.WARNING

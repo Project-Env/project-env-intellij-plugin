@@ -4,16 +4,8 @@
 
 ## [Unreleased]
 ### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
+- Show "refresh" notification whenever files were changed which are used by Project-Env.
+- Automatically exclude tool binary-roots
 
 ## [3.3.1]
 ### Added

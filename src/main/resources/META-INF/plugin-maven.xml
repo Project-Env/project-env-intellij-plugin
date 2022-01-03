@@ -1,10 +1,8 @@
 <idea-plugin>
 
-    <extensions defaultExtensionNs="ch.repolevedavaj.projectenv.intellijplugin">
-        <toolConfigurer
-                implementation="io.projectenv.intellijplugin.configurers.maven.MavenConfigurer"/>
-        <toolConfigurer
-                implementation="io.projectenv.intellijplugin.configurers.maven.MavenImporterJdkConfigurer"/>
-    </extensions>
+    <projectListeners>
+        <listener class="io.projectenv.intellijplugin.listeners.MavenConfigurer"
+                  topic="io.projectenv.intellijplugin.listeners.ProjectEnvToolsListener"/>
+    </projectListeners>
 
 </idea-plugin>

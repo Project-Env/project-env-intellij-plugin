@@ -6,31 +6,37 @@
 
     <depends>com.intellij.modules.platform</depends>
 
-    <extensionPoints>
-        <extensionPoint name="toolConfigurer"
-                        interface="io.projectenv.intellijplugin.configurers.ToolConfigurer"
-                        dynamic="true"
-                        area="IDEA_PROJECT"/>
-    </extensionPoints>
-
     <extensions defaultExtensionNs="com.intellij">
-        <projectService
-                serviceInterface="io.projectenv.intellijplugin.services.ExecutionEnvironmentService"
-                serviceImplementation="io.projectenv.intellijplugin.services.impl.ExecutionEnvironmentServiceImpl"/>
+
         <projectService
                 serviceInterface="io.projectenv.intellijplugin.services.ProjectEnvService"
                 serviceImplementation="io.projectenv.intellijplugin.services.impl.ProjectEnvServiceImpl"/>
         <projectService
                 serviceInterface="io.projectenv.intellijplugin.services.ProjectEnvCliResolverService"
                 serviceImplementation="io.projectenv.intellijplugin.services.impl.ProjectEnvCliResolverServiceImpl"/>
-        <notificationGroup id="Project-Env" displayType="BALLOON"/>
+        <projectService
+                serviceInterface="io.projectenv.intellijplugin.services.ProjectEnvConfigFileResolverService"
+                serviceImplementation="io.projectenv.intellijplugin.services.impl.ProjectEnvConfigFileResolverServiceImpl"/>
+
+        <notificationGroup id="Project-Env" displayType="BALLOON" icon="ProjectEnvPluginIcons.Default"/>
+
         <errorHandler implementation="io.projectenv.intellijplugin.services.impl.SentryErrorReportSubmitter"/>
+
     </extensions>
 
     <applicationListeners>
-        <listener class="io.projectenv.intellijplugin.ProjectEnvInitializer"
+        <listener class="io.projectenv.intellijplugin.listeners.ProjectEnvInitializer"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+
+    <projectListeners>
+        <listener class="io.projectenv.intellijplugin.listeners.ProjectEnvConfigFileListener"
+                  topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>
+        <listener class="io.projectenv.intellijplugin.listeners.ProjectEnvToolsRootExcluder"
+                  topic="io.projectenv.intellijplugin.listeners.ProjectEnvToolsListener"/>
+        <listener class="io.projectenv.intellijplugin.listeners.ProjectEnvFilesListener"
+                  topic="io.projectenv.intellijplugin.listeners.ProjectEnvToolsListener"/>
+    </projectListeners>
 
     <actions>
         <group id="ch.projectenv.actions"
