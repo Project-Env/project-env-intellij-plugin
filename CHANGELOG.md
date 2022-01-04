@@ -3,17 +3,8 @@
 # project-env-intellij-plugin Changelog
 
 ## [Unreleased]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
-
-### Security
+- Fixed adding exclusions by using the virtual-file-manager to refresh the directories to add
 
 ## [4.0.0]
 ### Added

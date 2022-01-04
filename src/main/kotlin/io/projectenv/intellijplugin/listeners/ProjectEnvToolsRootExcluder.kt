@@ -8,14 +8,13 @@ import com.intellij.openapi.project.ModuleListener
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ContentEntry
 import com.intellij.openapi.roots.ModuleRootModificationUtil
-import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.VirtualFileManager
 import io.projectenv.intellijplugin.toolinfo.ToolInfos
-import java.io.File
 
 class ProjectEnvToolsRootExcluder(val project: Project) : ProjectEnvToolsListener {
 
-    private var binaryRoots: Map<File, VirtualFile> = emptyMap()
+    private var binaryRoots: Set<VirtualFile> = emptySet()
 
     init {
         project.messageBus.connect().subscribe(
@@ -32,7 +31,7 @@ class ProjectEnvToolsRootExcluder(val project: Project) : ProjectEnvToolsListene
         val oldBinaryRoots = binaryRoots
         val newBinaryRoots = getBinaryRoots(toolInfos)
 
-        val removedRoots: Map<File, VirtualFile> = oldBinaryRoots.minus(newBinaryRoots.keys)
+        val removedRoots = oldBinaryRoots.minus(newBinaryRoots)
         removeExcludeFolders(removedRoots)
 
         addExcludeFolders(newBinaryRoots)
@@ -40,25 +39,25 @@ class ProjectEnvToolsRootExcluder(val project: Project) : ProjectEnvToolsListene
         binaryRoots = newBinaryRoots
     }
 
-    private fun getBinaryRoots(toolInfos: ToolInfos): Map<File, VirtualFile> {
-        val roots = HashMap<File, VirtualFile>()
+    private fun getBinaryRoots(toolInfos: ToolInfos): Set<VirtualFile> {
+        val roots = HashSet<VirtualFile>()
         for (infos in toolInfos.allToolInfos.values) {
             for (info in infos) {
                 if (info.toolBinariesRoot == null) {
                     continue
                 }
 
-                val toolBinariesRootAsVirtualFile = LocalFileSystem.getInstance()
-                    .refreshAndFindFileByIoFile(info.toolBinariesRoot) ?: continue
+                val toolBinariesRootAsVirtualFile = VirtualFileManager.getInstance()
+                    .refreshAndFindFileByNioPath(info.toolBinariesRoot.toPath()) ?: continue
 
-                roots[info.toolBinariesRoot] = toolBinariesRootAsVirtualFile
+                roots.add(toolBinariesRootAsVirtualFile)
             }
         }
 
         return roots
     }
 
-    private fun addExcludeFolders(directories: Map<File, VirtualFile>) {
+    private fun addExcludeFolders(directories: Set<VirtualFile>) {
         if (directories.isEmpty()) {
             return
         }
@@ -68,13 +67,13 @@ class ProjectEnvToolsRootExcluder(val project: Project) : ProjectEnvToolsListene
         }
     }
 
-    private fun addExcludeFolders(module: Module, directories: Map<File, VirtualFile>) {
+    private fun addExcludeFolders(module: Module, directories: Set<VirtualFile>) {
         forEachContentEntry(module, directories) { contentEntry, directory ->
-            contentEntry.addExcludeFolder(fileToUrl(directory.key))
+            contentEntry.addExcludeFolder(directory.url)
         }
     }
 
-    private fun removeExcludeFolders(directories: Map<File, VirtualFile>) {
+    private fun removeExcludeFolders(directories: Set<VirtualFile>) {
         if (directories.isEmpty()) {
             return
         }
@@ -84,28 +83,24 @@ class ProjectEnvToolsRootExcluder(val project: Project) : ProjectEnvToolsListene
         }
     }
 
-    private fun removeExcludeFolders(module: Module, directories: Map<File, VirtualFile>) {
+    private fun removeExcludeFolders(module: Module, directories: Set<VirtualFile>) {
         forEachContentEntry(module, directories) { contentEntry, directory ->
-            contentEntry.removeExcludeFolder(fileToUrl(directory.key))
+            contentEntry.removeExcludeFolder(directory.url)
         }
     }
 
     private fun forEachContentEntry(
         module: Module,
-        directories: Map<File, VirtualFile>,
-        callback: (ContentEntry, Map.Entry<File, VirtualFile>) -> Any
+        directories: Set<VirtualFile>,
+        callback: (ContentEntry, VirtualFile) -> Any
     ) {
         ModuleRootModificationUtil.updateModel(module) { model ->
             for (directory in directories) {
-                val contentEntry = MarkRootActionBase.findContentEntry(model, directory.value)
+                val contentEntry = MarkRootActionBase.findContentEntry(model, directory)
                 if (contentEntry != null) {
                     callback.invoke(contentEntry, directory)
                 }
             }
         }
-    }
-
-    private fun fileToUrl(file: File): String {
-        return file.toPath().toUri().toString()
     }
 }
