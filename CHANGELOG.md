@@ -4,16 +4,7 @@
 
 ## [Unreleased]
 ### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
+- Added support for IntelliJ 2022.1.X
 
 ## [4.0.1]
 ### Fixed
