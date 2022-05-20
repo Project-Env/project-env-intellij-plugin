@@ -30,10 +30,7 @@ object ProjectEnvNotificationGroup {
     fun createNotification(content: String, type: NotificationType): Notification {
         val notificationGroup = getNotificationGroup()
 
-        val notification = notificationGroup.createNotification(content, type)
-        notification.icon = notificationGroup.icon
-
-        return notification
+        return notificationGroup.createNotification(content, type)
     }
 
     private fun getNotificationGroup(): NotificationGroup {
