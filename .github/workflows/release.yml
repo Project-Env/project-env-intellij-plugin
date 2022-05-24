@@ -35,9 +35,7 @@ jobs:
           key: ${{ runner.os }}-plugin-verifier-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
       # Setup tools for the next steps
-      - uses: Project-Env/project-env-github-action@v1.2.0
-        with:
-          cli-version: '3.4.0'
+      - uses: Project-Env/project-env-github-action@v1.3.0
 
       - run: |
           echo "ORG_GRADLE_PROJECT_githubUsername=${{ github.actor }}" >> $GITHUB_ENV
