@@ -46,7 +46,7 @@ class ProjectEnvServiceImplTest : AbstractProjectEnvTest() {
         copyResourceToProjectRootAndRefresh("invalid-project-env.toml", "project-env.toml")
         clearFiredNotifications()
 
-        val pathElement = ProjectEnvCliHelper.setupProjectEnvCli("3.2.0", tempDir.createDir().toFile())
+        val pathElement = ProjectEnvCliHelper.setupProjectEnvCli("3.8.0", tempDir.createDir().toFile())
         withEnvironmentVariable(getPathVariableName(), createExtendedPathValue(pathElement)).execute {
             val service = project.service<ProjectEnvService>()
             service.refreshProjectEnv()

@@ -12,7 +12,7 @@ class ProjectEnvFilesListenerTest : AbstractProjectEnvTest() {
 
     @Test
     fun testRelevantFilesChanged() {
-        val pathElement = ProjectEnvCliHelper.setupProjectEnvCli("3.2.0", tempDir.createDir().toFile())
+        val pathElement = ProjectEnvCliHelper.setupProjectEnvCli("3.8.0", tempDir.createDir().toFile())
 
         withEnvironmentVariable(
             ProcessEnvironmentHelper.getPathVariableName(),
