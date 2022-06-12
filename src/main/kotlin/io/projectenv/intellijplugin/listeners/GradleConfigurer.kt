@@ -10,23 +10,20 @@ import org.jetbrains.plugins.gradle.settings.GradleProjectSettings
 import org.jetbrains.plugins.gradle.settings.GradleSettings
 import org.jetbrains.plugins.gradle.settings.GradleSettingsListener
 
-class GradleConfigurer(val project: Project) : ProjectEnvToolsListener {
+class GradleConfigurer(val project: Project) : ProjectEnvToolsListener, GradleSettingsListenerAdapter() {
 
     private var toolInfos: ToolInfos? = null
 
     init {
-        project.messageBus.connect().subscribe(
-            GradleSettingsListener.TOPIC,
-            object : GradleSettingsListenerAdapter() {
-                override fun onProjectsLinked(settings: MutableCollection<GradleProjectSettings>) {
-                    updateProjectsConfiguration(settings)
-                }
+        project.messageBus.connect().subscribe(GradleSettingsListener.TOPIC, this)
+    }
 
-                override fun onProjectsLoaded(settings: MutableCollection<GradleProjectSettings>) {
-                    updateProjectsConfiguration(settings)
-                }
-            }
-        )
+    override fun onProjectsLinked(settings: MutableCollection<GradleProjectSettings>) {
+        updateProjectsConfiguration(settings)
+    }
+
+    override fun onProjectsLoaded(settings: MutableCollection<GradleProjectSettings>) {
+        updateProjectsConfiguration(settings)
     }
 
     override fun toolsUpdated(toolInfos: ToolInfos) {
