@@ -12,6 +12,7 @@
 ### Removed
 
 ### Fixed
+- Creation of Gradle configurer
 
 ### Security
 
