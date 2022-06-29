@@ -20,7 +20,7 @@ class SentryErrorReportSubmitter : ErrorReportSubmitter() {
     init {
         Sentry.init { options ->
             options.dsn = "https://0db6a1b60a444f58a1a07dec6f63b060@o981100.ingest.sentry.io/5935634"
-            options.enableUncaughtExceptionHandler = false
+            options.isEnableUncaughtExceptionHandler = false
         }
     }
 
