@@ -4,12 +4,7 @@
 
 ## [Unreleased]
 ### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
+- Added support for IntelliJ 2022.3.X
 
 ### Fixed
 - Creation of Gradle configurer
