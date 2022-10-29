@@ -10,51 +10,41 @@ jobs:
     env:
       GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
-
-      # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      # Cache Gradle dependencies
       - name: Setup Gradle Dependencies Cache
         uses: actions/cache@v3.0.11
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
-      # Cache Plugin Verifier IDEs
       - name: Setup Plugin Verifier IDEs Cache
         uses: actions/cache@v3.0.11
         with:
           path: ~/.pluginVerifier/ides
           key: ${{ runner.os }}-plugin-verifier-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
-      # Setup tools for the next steps
       - uses: Project-Env/project-env-github-action@v1.3.0
 
       - run: |
           echo "ORG_GRADLE_PROJECT_githubUsername=${{ github.actor }}" >> $GITHUB_ENV
           echo "ORG_GRADLE_PROJECT_githubPassword=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
 
-      # Run detekt, ktlint and tests
       - name: Run Linters and Test
         run: gradle check
 
-      # Run verifyPlugin Gradle task
       - name: Verify Plugin Completeness
         run: gradle verifyPlugin
 
-      # Build artifact using buildPlugin Gradle task
       - name: Build Plugin
         run: gradle buildPlugin
 
-      # Run IntelliJ Plugin Verifier action using GitHub Action
       - name: Verify Binary Compatibility
         run: gradle runPluginVerifier -Pplugin.verifier.home.dir=~/.pluginVerifier
 
-      # Run Sonar analysis
       - name: Sonar
         if: ${{ github.actor != 'dependabot[bot]' }}
         run: gradle sonarqube
