@@ -7,6 +7,7 @@ import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
+import io.projectenv.intellijplugin.ProjectEnvPluginIcons
 import io.projectenv.intellijplugin.services.ProjectEnvService
 
 object ProjectEnvNotificationGroup {
@@ -30,7 +31,10 @@ object ProjectEnvNotificationGroup {
     fun createNotification(content: String, type: NotificationType): Notification {
         val notificationGroup = getNotificationGroup()
 
-        return notificationGroup.createNotification(content, type)
+        val notification = notificationGroup.createNotification(content, type)
+        notification.icon = ProjectEnvPluginIcons.Default
+
+        return notification
     }
 
     private fun getNotificationGroup(): NotificationGroup {

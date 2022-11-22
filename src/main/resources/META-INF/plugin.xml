@@ -18,16 +18,13 @@
                 serviceInterface="io.projectenv.intellijplugin.services.ProjectEnvConfigFileResolverService"
                 serviceImplementation="io.projectenv.intellijplugin.services.impl.ProjectEnvConfigFileResolverServiceImpl"/>
 
-        <notificationGroup id="Project-Env" displayType="BALLOON" icon="ProjectEnvPluginIcons.Default"/>
+        <notificationGroup id="Project-Env" displayType="BALLOON"/>
 
         <errorHandler implementation="io.projectenv.intellijplugin.services.impl.SentryErrorReportSubmitter"/>
 
-    </extensions>
+        <postStartupActivity implementation="io.projectenv.intellijplugin.listeners.ProjectEnvInitializer"/>
 
-    <applicationListeners>
-        <listener class="io.projectenv.intellijplugin.listeners.ProjectEnvInitializer"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+    </extensions>
 
     <projectListeners>
         <listener class="io.projectenv.intellijplugin.listeners.ProjectEnvConfigFileListener"
@@ -42,7 +39,7 @@
         <group id="ch.projectenv.actions"
                text="Project-Env"
                popup="true"
-               icon="ProjectEnvPluginIcons.Default">
+               icon="io.projectenv.intellijplugin.ProjectEnvPluginIcons.Default">
             <add-to-group group-id="ToolsMenu"/>
         </group>
         <action id="io.projectenv.intellijplugin.actions.ReloadProjectEnvAction"

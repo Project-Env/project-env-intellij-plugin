@@ -1,4 +1,4 @@
-package icons
+package io.projectenv.intellijplugin
 
 import com.intellij.openapi.util.IconLoader
 

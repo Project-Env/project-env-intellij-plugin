@@ -11,7 +11,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.7.21"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "1.9.0"
+    id("org.jetbrains.intellij") version "1.10.1"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "2.0.0"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    val projectEnvCommonsVersion = "1.1.0"
+    val projectEnvCommonsVersion = "1.2.1"
 
     implementation("io.projectenv.commons:process:$projectEnvCommonsVersion")
     implementation("io.projectenv.commons:gson:$projectEnvCommonsVersion")
@@ -77,7 +77,6 @@ jacoco {
 }
 
 tasks {
-// Set the JVM compatibility versions
     properties("javaVersion").let {
         withType<JavaCompile> {
             sourceCompatibility = it
@@ -86,6 +85,10 @@ tasks {
         withType<KotlinCompile> {
             kotlinOptions.jvmTarget = it
         }
+    }
+
+    buildSearchableOptions {
+        enabled = false
     }
 
     jacocoTestReport {

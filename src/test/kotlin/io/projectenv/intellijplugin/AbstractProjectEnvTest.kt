@@ -105,6 +105,8 @@ abstract class AbstractProjectEnvTest : HeavyPlatformTestCase() {
             startsWith(content),
             eq(type)
         )
+        verify(notificationGroup)!!.displayType
+        verify(notificationGroup)!!.isLogByDefault
         verifyNoMoreInteractions(notificationGroup)
         clearFiredNotifications()
     }
