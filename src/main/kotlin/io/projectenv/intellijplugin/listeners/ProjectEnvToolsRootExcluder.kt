@@ -20,8 +20,10 @@ class ProjectEnvToolsRootExcluder(val project: Project) : ProjectEnvToolsListene
         project.messageBus.connect().subscribe(
             ProjectTopics.MODULES,
             object : ModuleListener {
-                override fun moduleAdded(project: Project, module: Module) {
-                    addExcludeFolders(module, binaryRoots)
+                override fun modulesAdded(project: Project, modules: List<Module>) {
+                    for (module in modules) {
+                        addExcludeFolders(module, binaryRoots)
+                    }
                 }
             }
         )

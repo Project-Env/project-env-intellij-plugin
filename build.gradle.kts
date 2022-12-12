@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    val projectEnvCommonsVersion = "1.1.0"
+    val projectEnvCommonsVersion = "1.2.1"
 
     implementation("io.projectenv.commons:process:$projectEnvCommonsVersion")
     implementation("io.projectenv.commons:gson:$projectEnvCommonsVersion")
@@ -77,7 +77,6 @@ jacoco {
 }
 
 tasks {
-// Set the JVM compatibility versions
     properties("javaVersion").let {
         withType<JavaCompile> {
             sourceCompatibility = it
@@ -86,6 +85,10 @@ tasks {
         withType<KotlinCompile> {
             kotlinOptions.jvmTarget = it
         }
+    }
+
+    buildSearchableOptions {
+        enabled = false
     }
 
     jacocoTestReport {
