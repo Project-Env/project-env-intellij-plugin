@@ -52,23 +52,23 @@ jobs:
 
       - name: Render and Export Changelog
         id: changelog
-        uses: repolevedavaj/github-markdown-to-html@v1
+        uses: repolevedavaj/github-markdown-to-html@v0.1.0
         with:
           text: ${{ steps.release.outputs.body }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Linters and Test
-        run: gradle check -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelog=${{ steps.changelog.outputs.html }}
+        run: gradle check -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'
 
       - name: Verify Plugin Completeness
-        run: gradle verifyPlugin -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelog=${{ steps.changelog.outputs.html }}
+        run: gradle verifyPlugin -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'
 
       - name: Build Plugin
-        run: gradle buildPlugin -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelog=${{ steps.changelog.outputs.html }}
+        run: gradle buildPlugin -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'
 
       - name: Verify Binary Compatibility
-        run: gradle runPluginVerifier -Pplugin.verifier.home.dir=~/.pluginVerifier -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelog=${{ steps.changelog.outputs.html }}
+        run: gradle runPluginVerifier -Pplugin.verifier.home.dir=~/.pluginVerifier -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'
 
       - name: Upload Release Asset
         id: upload-release-asset
@@ -84,4 +84,4 @@ jobs:
       - name: Publish Plugin
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-        run: gradle publishPlugin -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelog=${{ steps.changelog.outputs.html }}
+        run: gradle publishPlugin -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'

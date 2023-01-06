@@ -120,7 +120,7 @@ tasks {
             }.joinToString("\n").run { markdownToHTML(this) }
         )
 
-        changeNotes.set(markdownToHTML(properties("pluginChangelog")))
+        changeNotes.set(properties("pluginChangelogHtml"))
     }
 
     runPluginVerifier {
