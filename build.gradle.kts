@@ -44,7 +44,7 @@ dependencies {
 
     implementation("io.sentry:sentry:6.10.0")
 
-    testImplementation("org.assertj:assertj-core:3.23.1")
+    testImplementation("org.assertj:assertj-core:3.24.0")
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
 }
