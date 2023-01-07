@@ -78,7 +78,7 @@ jobs:
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
           asset_path: ./build/distributions/${{ steps.artifact.outputs.artifact }}
-          asset_name: ${{ steps.revision.outputs.revision }}
+          asset_name: ${{ steps.artifact.outputs.artifact }}
           asset_content_type: application/zip
           
       - name: Publish Plugin
