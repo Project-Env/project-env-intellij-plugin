@@ -52,7 +52,7 @@ jobs:
 
       - name: Render and Export Changelog
         id: changelog
-        uses: repolevedavaj/github-markdown-to-html@v0.1.0
+        uses: repolevedavaj/github-markdown-to-html@v1.0.0
         with:
           text: ${{ steps.release.outputs.body }}
         env:
