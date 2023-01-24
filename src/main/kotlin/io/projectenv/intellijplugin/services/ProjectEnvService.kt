@@ -4,5 +4,5 @@ import com.intellij.openapi.Disposable
 
 interface ProjectEnvService : Disposable {
 
-    fun refreshProjectEnv()
+    fun refreshProjectEnv(sync: Boolean = false)
 }

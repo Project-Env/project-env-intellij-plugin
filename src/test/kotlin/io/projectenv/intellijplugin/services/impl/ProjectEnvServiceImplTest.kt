@@ -35,7 +35,7 @@ class ProjectEnvServiceImplTest : AbstractProjectEnvTest() {
         hideProjectEnvCli()
 
         val service = project.service<ProjectEnvService>()
-        service.refreshProjectEnv()
+        service.refreshProjectEnv(true)
 
         assertNotificationFired("Could not resolve Project-Env CLI", NotificationType.WARNING)
     }
@@ -49,7 +49,7 @@ class ProjectEnvServiceImplTest : AbstractProjectEnvTest() {
         val pathElement = ProjectEnvCliHelper.setupProjectEnvCli("3.8.0", tempDir.createDir().toFile())
         withEnvironmentVariable(getPathVariableName(), createExtendedPathValue(pathElement)).execute {
             val service = project.service<ProjectEnvService>()
-            service.refreshProjectEnv()
+            service.refreshProjectEnv(true)
 
             assertNotificationFired("Failed to execute Project-Env CLI", NotificationType.WARNING)
         }
@@ -64,7 +64,7 @@ class ProjectEnvServiceImplTest : AbstractProjectEnvTest() {
         val pathElement = ProjectEnvCliHelper.setupProjectEnvCli("3.8.0", tempDir.createDir().toFile())
         withEnvironmentVariable(getPathVariableName(), createExtendedPathValue(pathElement)).execute {
             val service = project.service<ProjectEnvService>()
-            service.refreshProjectEnv()
+            service.refreshProjectEnv(true)
 
             assertMavenSettings()
             assertJdkSettings()

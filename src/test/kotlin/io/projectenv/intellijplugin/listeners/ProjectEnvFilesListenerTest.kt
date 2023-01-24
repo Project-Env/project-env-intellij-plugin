@@ -22,7 +22,7 @@ class ProjectEnvFilesListenerTest : AbstractProjectEnvTest() {
             copyResourceToProjectRootAndRefresh("project-env.toml")
             assertNotificationFired("Project-Env config file has been updated")
 
-            project.service<ProjectEnvService>().refreshProjectEnv()
+            project.service<ProjectEnvService>().refreshProjectEnv(true)
             assertNoNotificationFired()
 
             copyResourceToProjectRootAndRefresh("global-settings-1.xml", "global-settings.xml")
@@ -31,7 +31,7 @@ class ProjectEnvFilesListenerTest : AbstractProjectEnvTest() {
             copyResourceToProjectRootAndRefresh("user-settings-1.xml", "user-settings.xml")
             assertNoNotificationFired()
 
-            project.service<ProjectEnvService>().refreshProjectEnv()
+            project.service<ProjectEnvService>().refreshProjectEnv(true)
             assertNoNotificationFired()
 
             copyResourceToProjectRootAndRefresh("user-settings-2.xml", "user-settings.xml")

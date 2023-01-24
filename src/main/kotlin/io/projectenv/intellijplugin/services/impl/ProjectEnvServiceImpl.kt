@@ -2,7 +2,10 @@ package io.projectenv.intellijplugin.services.impl
 
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.components.service
+import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
+import com.intellij.openapi.progress.Task
+import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator
 import com.intellij.openapi.project.Project
 import io.projectenv.core.commons.process.ProcessEnvironmentHelper.getPathVariableName
 import io.projectenv.core.commons.process.ProcessHelper
@@ -20,7 +23,7 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
 
     private val projectRoot = File(project.basePath!!)
 
-    override fun refreshProjectEnv() {
+    override fun refreshProjectEnv(sync: Boolean) {
         val configurationFile = project.service<ProjectEnvConfigFileResolverService>().resolveConfig() ?: return
 
         val projectEnvCliExecutable = project.service<ProjectEnvCliResolverService>().resolveCli()
@@ -29,7 +32,7 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
             return
         }
 
-        runProcess("Installing Project-Env") {
+        runProcess("Installing Project-Env", sync) {
             val result = executeProjectEnvCli(projectEnvCliExecutable, configurationFile)
             if (isSuccessfulCliExecution(result)) {
                 handleSuccessfulCliExecution(result)
@@ -46,15 +49,19 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
         ).notify(project)
     }
 
-    private fun runProcess(title: String, runnable: Runnable) {
-        ProgressManager.getInstance().runProcessWithProgressSynchronously(
-            {
-                runnable.run()
-            },
-            title,
-            false,
-            project
-        )
+    private fun runProcess(title: String, sync: Boolean, runnable: Runnable) {
+        if (sync) {
+            ProgressManager.getInstance().runProcessWithProgressSynchronously(runnable, title, false, project)
+        } else {
+            val task = object : Task.Backgroundable(project, title, false) {
+                override fun run(indicator: ProgressIndicator) {
+                    runnable.run()
+                }
+            }
+
+            ProgressManager.getInstance()
+                .runProcessWithProgressAsynchronously(task, BackgroundableProcessIndicator(task))
+        }
     }
 
     private fun executeProjectEnvCli(projectEnvCliExecutable: File, configurationFile: File): ProcessResult {
