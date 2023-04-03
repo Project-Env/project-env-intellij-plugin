@@ -27,7 +27,7 @@ import java.io.File
 class ProjectEnvServiceImplTest : AbstractProjectEnvTest() {
 
     @Test
-    fun testRefreshFailsBecauseNoCliInstalled() {
+    fun testRefreshUsesEmbeddedCli() {
         copyResourceToProjectRootAndRefresh("build.gradle")
         copyResourceToProjectRootAndRefresh("project-env.toml")
         clearFiredNotifications()
@@ -37,7 +37,10 @@ class ProjectEnvServiceImplTest : AbstractProjectEnvTest() {
         val service = project.service<ProjectEnvService>()
         service.refreshProjectEnv(true)
 
-        assertNotificationFired("Could not resolve Project-Env CLI", NotificationType.WARNING)
+        assertMavenSettings()
+        assertJdkSettings()
+        assertNodeSettings()
+        assertGradleSettings()
     }
 
     @Test

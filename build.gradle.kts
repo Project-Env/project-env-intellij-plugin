@@ -7,15 +7,15 @@ plugins {
     // Java support
     id("java")
     // JaCoCo report support
-    id("jacoco")
+    id("org.jetbrains.kotlinx.kover") version "0.7.0-Alpha"
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.8.10"
+    id("org.jetbrains.kotlin.jvm") version "1.8.20"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "1.13.0"
+    id("org.jetbrains.intellij") version "1.13.3"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "2.0.0"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
-    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
     // Sonar support
     id("org.sonarqube") version "4.0.0.2929"
 }
@@ -28,15 +28,22 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        name = "github"
+        name = "projectEnvCommonsJava"
         url = uri("https://maven.pkg.github.com/Project-Env/project-env-commons-java")
+        credentials(PasswordCredentials::class)
+    }
+    maven {
+        name = "projectEnvCli"
+        url = uri("https://maven.pkg.github.com/Project-Env/project-env-cli")
         credentials(PasswordCredentials::class)
     }
 }
 
 dependencies {
-    val projectEnvCommonsVersion = "1.2.1"
+    val projectEnvCliVersion = "3.15.0"
+    implementation("io.projectenv.core:cli:$projectEnvCliVersion")
 
+    val projectEnvCommonsVersion = "1.2.1"
     implementation("io.projectenv.commons:process:$projectEnvCommonsVersion")
     implementation("io.projectenv.commons:gson:$projectEnvCommonsVersion")
     testImplementation("io.projectenv.commons:archive:$projectEnvCommonsVersion")
@@ -69,11 +76,8 @@ sonarqube {
         property("sonar.organization", "project-env")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.coverage.exclusions", "**/*Exception.kt")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/kover/report.xml")
     }
-}
-
-jacoco {
-    toolVersion = "0.8.8"
 }
 
 tasks {
@@ -89,17 +93,6 @@ tasks {
 
     buildSearchableOptions {
         enabled = false
-    }
-
-    jacocoTestReport {
-        reports {
-            xml.required.set(true)
-        }
-        dependsOn(test)
-    }
-
-    test {
-        finalizedBy(jacocoTestReport)
     }
 
     patchPluginXml {

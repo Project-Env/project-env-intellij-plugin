@@ -14,7 +14,7 @@ class MavenConfigurer(val project: Project) : ProjectEnvToolsListener {
 
         WriteAction.runAndWait<Throwable> {
             val settings = MavenProjectsManager.getInstance(project)
-            settings.generalSettings.mavenHome = mavenInfo.toolBinariesRoot!!.canonicalPath
+            settings.generalSettings.mavenHome = mavenInfo.toolBinariesRoot.get().canonicalPath
 
             val userSettingsFile = mavenInfo.unhandledProjectResources["userSettingsFile"]
             if (userSettingsFile != null) {
