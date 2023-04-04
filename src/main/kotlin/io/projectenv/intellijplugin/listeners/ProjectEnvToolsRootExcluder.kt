@@ -50,7 +50,7 @@ class ProjectEnvToolsRootExcluder(val project: Project) : ProjectEnvToolsListene
                 }
 
                 val toolBinariesRootAsVirtualFile = VirtualFileManager.getInstance()
-                    .refreshAndFindFileByNioPath(info.toolBinariesRoot.toPath()) ?: continue
+                    .refreshAndFindFileByNioPath(info.toolBinariesRoot.get().toPath()) ?: continue
 
                 roots.add(toolBinariesRootAsVirtualFile)
             }

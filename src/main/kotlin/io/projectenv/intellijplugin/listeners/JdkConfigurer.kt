@@ -14,7 +14,7 @@ class JdkConfigurer(val project: Project) : ProjectEnvToolsListener {
 
         WriteAction.runAndWait<Throwable> {
             val jdkName = createJdkName()
-            val newJdk = JavaSdk.getInstance().createJdk(jdkName, jdkInfo.toolBinariesRoot!!.canonicalPath, false)
+            val newJdk = JavaSdk.getInstance().createJdk(jdkName, jdkInfo.toolBinariesRoot.get().canonicalPath, false)
 
             val oldJdk = ProjectJdkTable.getInstance().findJdk(jdkName)
             if (oldJdk != null) {

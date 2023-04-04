@@ -13,7 +13,7 @@ class NodeJsConfigurer(val project: Project) : ProjectEnvToolsListener {
         val nodejsInfo = toolInfos.getToolInfo("nodejs") ?: return
 
         WriteAction.runAndWait<Throwable> {
-            val interpreter = NodeJsLocalInterpreter(nodejsInfo.primaryExecutable!!.canonicalPath)
+            val interpreter = NodeJsLocalInterpreter(nodejsInfo.primaryExecutable.get().canonicalPath)
 
             NodeJsLocalInterpreterManager.getInstance().interpreters.stream().filter { existingInterpreter ->
                 interpreter.interpreterSystemDependentPath == existingInterpreter.interpreterSystemDependentPath

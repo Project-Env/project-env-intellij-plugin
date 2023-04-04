@@ -1,6 +1,7 @@
 package io.projectenv.intellijplugin.toolinfo
 
 import io.projectenv.core.commons.process.ProcessEnvironmentHelper
+import io.projectenv.core.toolsupport.spi.ToolInfo
 import java.io.File
 import java.util.Collections
 

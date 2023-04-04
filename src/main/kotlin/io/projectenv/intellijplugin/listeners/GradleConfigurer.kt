@@ -39,7 +39,7 @@ class GradleConfigurer(val project: Project) : ProjectEnvToolsListener, GradleSe
         WriteAction.runAndWait<Throwable> {
             for (projectSettings in settings) {
                 projectSettings.distributionType = DistributionType.LOCAL
-                projectSettings.gradleHome = gradleInfo.toolBinariesRoot?.canonicalPath
+                projectSettings.gradleHome = gradleInfo.toolBinariesRoot.get().canonicalPath
 
                 if (hasJdkInfo) {
                     projectSettings.gradleJvm = ExternalSystemJdkUtil.USE_PROJECT_JDK

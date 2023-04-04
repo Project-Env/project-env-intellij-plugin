@@ -18,7 +18,6 @@ class ProjectEnvFilesListenerTest : AbstractProjectEnvTest() {
             ProcessEnvironmentHelper.getPathVariableName(),
             ProcessEnvironmentHelper.createExtendedPathValue(pathElement)
         ).execute {
-
             copyResourceToProjectRootAndRefresh("project-env.toml")
             assertNotificationFired("Project-Env config file has been updated")
 

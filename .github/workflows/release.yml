@@ -29,8 +29,10 @@ jobs:
       - uses: Project-Env/project-env-github-action@v1.3.1
 
       - run: |
-          echo "ORG_GRADLE_PROJECT_githubUsername=${{ github.actor }}" >> $GITHUB_ENV
-          echo "ORG_GRADLE_PROJECT_githubPassword=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "ORG_GRADLE_PROJECT_projectEnvCliUsername=${{ github.actor }}" >> $GITHUB_ENV
+          echo "ORG_GRADLE_PROJECT_projectEnvCliPassword=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "ORG_GRADLE_PROJECT_projectEnvCommonsJavaUsername=${{ github.actor }}" >> $GITHUB_ENV
+          echo "ORG_GRADLE_PROJECT_projectEnvCommonsJavaPassword=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
 
       - name: Update Release
         id: release
