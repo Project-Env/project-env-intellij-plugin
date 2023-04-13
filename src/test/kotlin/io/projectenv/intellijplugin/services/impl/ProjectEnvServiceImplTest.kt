@@ -3,7 +3,6 @@ package io.projectenv.intellijplugin.services.impl
 import com.github.stefanbirkner.systemlambda.SystemLambda.withEnvironmentVariable
 import com.intellij.javascript.nodejs.interpreter.NodeJsInterpreterManager
 import com.intellij.javascript.nodejs.interpreter.local.NodeJsLocalInterpreter
-import com.intellij.notification.NotificationType
 import com.intellij.openapi.components.service
 import com.intellij.openapi.externalSystem.service.execution.ExternalSystemJdkUtil
 import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl
@@ -17,6 +16,7 @@ import io.projectenv.intellijplugin.ProjectEnvCliHelper
 import io.projectenv.intellijplugin.services.ProjectEnvCliResolverService
 import io.projectenv.intellijplugin.services.ProjectEnvService
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.jetbrains.idea.maven.execution.MavenRunnerSettings
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.plugins.gradle.service.project.open.linkAndRefreshGradleProject
@@ -52,9 +52,8 @@ class ProjectEnvServiceImplTest : AbstractProjectEnvTest() {
         val pathElement = ProjectEnvCliHelper.setupProjectEnvCli("3.8.0", tempDir.createDir().toFile())
         withEnvironmentVariable(getPathVariableName(), createExtendedPathValue(pathElement)).execute {
             val service = project.service<ProjectEnvService>()
-            service.refreshProjectEnv(true)
 
-            assertNotificationFired("Failed to execute Project-Env CLI", NotificationType.WARNING)
+            assertThatThrownBy { service.refreshProjectEnv(true) }.hasMessageStartingWith("Failed to execute Project-Env CLI")
         }
     }
 

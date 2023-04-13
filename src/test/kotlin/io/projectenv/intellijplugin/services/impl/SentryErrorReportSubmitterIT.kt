@@ -1,5 +1,6 @@
 package io.projectenv.intellijplugin.services.impl
 
+import com.intellij.diagnostic.LogMessage
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent
 import com.intellij.openapi.diagnostic.SubmittedReportInfo
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
@@ -14,7 +15,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockStatic
 import org.mockito.kotlin.any
 import java.awt.Component
-import java.util.UUID
+import java.util.*
 
 class SentryErrorReportSubmitterIT : BasePlatformTestCase() {
 
@@ -39,7 +40,7 @@ class SentryErrorReportSubmitterIT : BasePlatformTestCase() {
             }
             sentry.`when`<SentryId> { Sentry.captureEvent(any()) }.then {
                 val event = it.getArgument<SentryEvent>(0)
-                assertThat(event.message?.formatted).isEqualTo("java.lang.Throwable: test error")
+                assertThat(event.message?.formatted).isEqualTo("test message")
 
                 SentryId(UUID.randomUUID())
             }
@@ -73,7 +74,7 @@ class SentryErrorReportSubmitterIT : BasePlatformTestCase() {
             }
             sentry.`when`<SentryId> { Sentry.captureEvent(any()) }.then {
                 val event = it.getArgument<SentryEvent>(0)
-                assertThat(event.message?.formatted).isEqualTo("java.lang.Throwable: test error")
+                assertThat(event.message?.formatted).isEqualTo("test message")
 
                 SentryId.EMPTY_ID
             }
@@ -83,6 +84,38 @@ class SentryErrorReportSubmitterIT : BasePlatformTestCase() {
             val component = mock(Component::class.java)
             SentryErrorReportSubmitter().submit(arrayOf(event), "test comment", component) {
                 assertThat(it.status).isEqualTo(SubmittedReportInfo.SubmissionStatus.FAILED)
+            }
+        }
+    }
+
+    @Test
+    fun testSubmitErrorsWithLogMessage() {
+        executeSubmitErrorsLogMessageTest()
+    }
+
+    private fun executeSubmitErrorsLogMessageTest() {
+        mockStatic(Sentry::class.java).use { sentry ->
+            val throwable = Throwable("test error")
+            val message = "test message"
+
+            sentry.`when`<Void> { Sentry.init(any<Sentry.OptionsConfiguration<SentryOptions>>()) }.then {
+                // noop
+            }
+            sentry.`when`<SentryId> { Sentry.captureEvent(any()) }.then {
+                val event = it.getArgument<SentryEvent>(0)
+                assertThat(event.message?.formatted).isEqualTo(message)
+                assertThat(event.throwable).isEqualTo(throwable)
+
+                SentryId(UUID.randomUUID())
+            }
+            sentry.`when`<Void> { Sentry.captureUserFeedback(any()) }.then {
+                val userFeedback = it.getArgument<UserFeedback>(0)
+                assertThat(userFeedback.comments).isEqualTo("test comment")
+            }
+
+            val component = mock(Component::class.java)
+            SentryErrorReportSubmitter().submit(arrayOf(LogMessage.createEvent(throwable, message)), "test comment", component) {
+                assertThat(it.status).isEqualTo(SubmittedReportInfo.SubmissionStatus.NEW_ISSUE)
             }
         }
     }

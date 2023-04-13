@@ -45,7 +45,7 @@ class ProjectEnvToolsRootExcluder(val project: Project) : ProjectEnvToolsListene
         val roots = HashSet<VirtualFile>()
         for (infos in toolInfos.allToolInfos.values) {
             for (info in infos) {
-                if (info.toolBinariesRoot == null) {
+                if (info.toolBinariesRoot == null || info.toolBinariesRoot.isEmpty) {
                     continue
                 }
 
