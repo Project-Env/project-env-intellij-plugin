@@ -1,6 +1,5 @@
 package io.projectenv.intellijplugin.services.impl
 
-import com.intellij.notification.NotificationType
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
@@ -19,14 +18,13 @@ import io.projectenv.core.toolsupport.spi.ToolInfo
 import io.projectenv.core.toolsupport.spi.ToolSupport
 import io.projectenv.core.toolsupport.spi.ToolSupportContext
 import io.projectenv.intellijplugin.listeners.ProjectEnvTopics
-import io.projectenv.intellijplugin.notifications.ProjectEnvNotificationGroup
 import io.projectenv.intellijplugin.services.ProjectEnvCliResolverService
 import io.projectenv.intellijplugin.services.ProjectEnvConfigFileResolverService
 import io.projectenv.intellijplugin.services.ProjectEnvService
 import io.projectenv.intellijplugin.toolinfo.ToolInfoParser
 import io.projectenv.intellijplugin.toolinfo.ToolInfos
 import java.io.File
-import java.util.ServiceLoader
+import java.util.*
 
 class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
 
@@ -36,20 +34,15 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
         val configurationFile = project.service<ProjectEnvConfigFileResolverService>().resolveConfig() ?: return
 
         runProcess("Installing Project-Env", sync) {
-            try {
-                val projectEnvCliExecutable = project.service<ProjectEnvCliResolverService>().resolveCli()
+            val projectEnvCliExecutable = project.service<ProjectEnvCliResolverService>().resolveCli()
 
-                val toolInfos = if (projectEnvCliExecutable != null) {
-                    executeProjectEnvCliExecutable(projectEnvCliExecutable, configurationFile)
-                } else {
-                    executeEmbeddedProjectEnvCli(configurationFile)
-                }
-
-                project.messageBus.syncPublisher(ProjectEnvTopics.TOOLS_TOPIC).toolsUpdated(toolInfos)
-            } catch (e: Exception) {
-                ProjectEnvNotificationGroup.createNotification(e.message.orEmpty(), NotificationType.WARNING)
-                    .notify(project)
+            val toolInfos = if (projectEnvCliExecutable != null) {
+                executeProjectEnvCliExecutable(projectEnvCliExecutable, configurationFile)
+            } else {
+                executeEmbeddedProjectEnvCli(configurationFile)
             }
+
+            project.messageBus.syncPublisher(ProjectEnvTopics.TOOLS_TOPIC).toolsUpdated(toolInfos)
         }
     }
 
@@ -83,7 +76,7 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
         if (isSuccessfulCliExecution(result)) {
             return ToolInfoParser.fromJson(result.stdOutput.get())
         } else {
-            throw Exception("Failed to execute Project-Env CLI. See process output for more details:\n${result.errOutput.get()}")
+            throw RuntimeException("Failed to execute Project-Env CLI. See process output for more details:\n${result.errOutput.get()}")
         }
     }
 

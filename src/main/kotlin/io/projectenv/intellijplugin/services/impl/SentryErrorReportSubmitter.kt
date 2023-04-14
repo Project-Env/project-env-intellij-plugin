@@ -1,5 +1,6 @@
 package io.projectenv.intellijplugin.services.impl
 
+import com.intellij.diagnostic.LogMessage
 import com.intellij.openapi.diagnostic.ErrorReportSubmitter
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent
 import com.intellij.openapi.diagnostic.SubmittedReportInfo
@@ -36,7 +37,7 @@ class SentryErrorReportSubmitter : ErrorReportSubmitter() {
     ): Boolean {
         ProgressManager.getInstance().run {
             val sentryEvent = createSentryEventFromError(getMainError(events))
-            setReleaseVersionOnSentryEvent(sentryEvent, pluginDescriptor?.version)
+            setReleaseVersionOnSentryEvent(sentryEvent)
 
             val sentryEventId = Sentry.captureEvent(sentryEvent)
             if (successfullySent(sentryEventId)) {
@@ -56,20 +57,37 @@ class SentryErrorReportSubmitter : ErrorReportSubmitter() {
     }
 
     private fun createSentryEventFromError(event: IdeaLoggingEvent): SentryEvent {
-        val sentryEvent = SentryEvent()
+        return if (event.data is LogMessage) {
+            val logMessage = (event.data as LogMessage)
+            val sentryEvent = SentryEvent(logMessage.throwable)
+            if (logMessage.message.isNotBlank()) {
+                val sentryMessage = Message()
+                sentryMessage.formatted = logMessage.message
+                sentryEvent.message = sentryMessage
+            }
 
-        val sentryMessage = Message()
-        sentryMessage.formatted = event.throwableText.split('\n').getOrNull(0)
-        sentryEvent.message = sentryMessage
+            return sentryEvent
+        } else {
+            val sentryEvent = SentryEvent()
+            if (event.message != null) {
+                val sentryMessage = Message()
+                sentryMessage.formatted = event.message
+                sentryEvent.message = sentryMessage
+            } else {
+                val sentryMessage = Message()
+                sentryMessage.formatted = event.throwableText.split('\n').getOrNull(0)
+                sentryEvent.message = sentryMessage
+            }
 
-        sentryEvent.level = SentryLevel.ERROR
-        sentryEvent.contexts["Stacktrace"] = mapOf("Value" to event.throwableText)
+            sentryEvent.level = SentryLevel.ERROR
+            sentryEvent.contexts["Stacktrace"] = mapOf("Value" to event.throwableText)
 
-        return sentryEvent
+            return sentryEvent
+        }
     }
 
-    private fun setReleaseVersionOnSentryEvent(sentryEvent: SentryEvent, releaseVersion: String?) {
-        sentryEvent.release = releaseVersion
+    private fun setReleaseVersionOnSentryEvent(sentryEvent: SentryEvent) {
+        sentryEvent.release = pluginDescriptor?.version
     }
 
     private fun successfullySent(sentryEventId: SentryId): Boolean {
