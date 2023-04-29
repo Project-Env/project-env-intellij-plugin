@@ -6,7 +6,7 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/15746-project-env.svg)](https://plugins.jetbrains.com/plugin/15746-project-env)
 
 <!-- Plugin description -->
-This plugin configures tools setup by the Project-Env CLI (see [Project-Env](https://project-env.github.io/) for more details), as far as possible, in the IntelliJ project settings.
+This plugin configures tools setup by the Project-Env CLI (see [Project-Env](https://project-env.github.io/) for more details), as far as possible, in the IntelliJ project settings. If the Project-Env CLI cannot be resolved through the `PATH` variable, the plugin will use a bundled variant.
 
 Currently, the following project settings are configured automatically if the tool is declared:
 * JDK: Adds the JDK to the JDK table and sets it as project JDK
