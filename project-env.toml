@@ -2,7 +2,7 @@ tools_directory = ".tools"
 
 [jdk]
 distribution = "Temurin"
-distribution_version = "^17.0.6+10"
+distribution_version = "^17.0.8+7"
 
 [gradle]
-version = "*8.0.2"
+version = "*8.2.1"
