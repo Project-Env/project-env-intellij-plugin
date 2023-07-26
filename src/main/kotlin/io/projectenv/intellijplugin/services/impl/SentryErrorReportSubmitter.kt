@@ -66,7 +66,7 @@ class SentryErrorReportSubmitter : ErrorReportSubmitter() {
                 sentryEvent.message = sentryMessage
             }
 
-            return sentryEvent
+            sentryEvent
         } else {
             val sentryEvent = SentryEvent()
             if (event.message != null) {
@@ -82,7 +82,7 @@ class SentryErrorReportSubmitter : ErrorReportSubmitter() {
             sentryEvent.level = SentryLevel.ERROR
             sentryEvent.contexts["Stacktrace"] = mapOf("Value" to event.throwableText)
 
-            return sentryEvent
+            sentryEvent
         }
     }
 
