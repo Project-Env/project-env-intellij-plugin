@@ -24,7 +24,7 @@ import io.projectenv.intellijplugin.services.ProjectEnvService
 import io.projectenv.intellijplugin.toolinfo.ToolInfoParser
 import io.projectenv.intellijplugin.toolinfo.ToolInfos
 import java.io.File
-import java.util.*
+import java.util.ServiceLoader
 
 class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
 
@@ -42,7 +42,9 @@ class ProjectEnvServiceImpl(val project: Project) : ProjectEnvService {
                 executeEmbeddedProjectEnvCli(configurationFile)
             }
 
-            project.messageBus.syncPublisher(ProjectEnvTopics.TOOLS_TOPIC).toolsUpdated(toolInfos)
+            if (!project.isDisposed) {
+                project.messageBus.syncPublisher(ProjectEnvTopics.TOOLS_TOPIC).toolsUpdated(toolInfos)
+            }
         }
     }
 
