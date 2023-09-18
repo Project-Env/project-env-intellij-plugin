@@ -17,7 +17,7 @@ plugins {
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
     id("org.jlleitschuh.gradle.ktlint") version "11.5.1"
     // Sonar support
-    id("org.sonarqube") version "4.3.0.3225"
+    id("org.sonarqube") version "4.3.1.3277"
 }
 
 group = properties("pluginGroup")
