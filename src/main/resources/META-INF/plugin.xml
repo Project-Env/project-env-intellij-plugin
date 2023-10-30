@@ -53,5 +53,6 @@
     <depends optional="true" config-file="plugin-maven.xml">org.jetbrains.idea.maven</depends>
     <depends optional="true" config-file="plugin-gradle.xml">com.intellij.gradle</depends>
     <depends optional="true" config-file="plugin-node.xml">NodeJS</depends>
+    <depends optional="true" config-file="plugin-sonarlint.xml">org.sonarlint.idea</depends>
 
 </idea-plugin>

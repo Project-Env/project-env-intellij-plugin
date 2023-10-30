@@ -1,0 +1,8 @@
+<idea-plugin>
+
+    <projectListeners>
+        <listener class="io.projectenv.intellijplugin.listeners.SonarLintConfigurer"
+                  topic="io.projectenv.intellijplugin.listeners.ProjectEnvToolsListener"/>
+    </projectListeners>
+
+</idea-plugin>
