@@ -49,7 +49,7 @@ dependencies {
     testImplementation("io.projectenv.commons:archive:$projectEnvCommonsVersion")
     testImplementation("io.projectenv.commons:string-substitutor:$projectEnvCommonsVersion")
 
-    implementation("io.sentry:sentry:6.32.0")
+    implementation("io.sentry:sentry:7.0.0")
 
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
