@@ -1,6 +1,6 @@
 # Project-Env IntelliJ-Plugin
 
-![Build](https://github.com/Project-Env/project-env-intellij-plugin/workflows/Build/badge.svg)
+[![Build](https://github.com/Project-Env/project-env-intellij-plugin/actions/workflows/build.yml/badge.svg)](https://github.com/Project-Env/project-env-intellij-plugin/actions/workflows/build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Project-Env_project-env-intellij-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=Project-Env_project-env-intellij-plugin)
 [![Version](https://img.shields.io/jetbrains/plugin/v/15746-project-env.svg)](https://plugins.jetbrains.com/plugin/15746-project-env)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/15746-project-env.svg)](https://plugins.jetbrains.com/plugin/15746-project-env)
