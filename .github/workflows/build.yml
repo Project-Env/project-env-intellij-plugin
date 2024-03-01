@@ -16,13 +16,13 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v4.0.0
+        uses: actions/cache@v4.0.1
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
       - name: Setup Plugin Verifier IDEs Cache
-        uses: actions/cache@v4.0.0
+        uses: actions/cache@v4.0.1
         with:
           path: ~/.pluginVerifier/ides
           key: ${{ runner.os }}-plugin-verifier-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
