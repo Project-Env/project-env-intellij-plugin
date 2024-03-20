@@ -26,7 +26,7 @@ jobs:
           path: ~/.pluginVerifier/ides
           key: ${{ runner.os }}-plugin-verifier-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
-      - uses: Project-Env/project-env-github-action@v1.3.1
+      - uses: Project-Env/project-env-github-action@v1.4.0
 
       - run: |
           echo "ORG_GRADLE_PROJECT_projectEnvCliUsername=${{ github.actor }}" >> $GITHUB_ENV
