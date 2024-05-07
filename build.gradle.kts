@@ -9,7 +9,7 @@ plugins {
     // JaCoCo report support
     id("org.jetbrains.kotlinx.kover") version "0.7.6"
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.9.22"
+    id("org.jetbrains.kotlin.jvm") version "1.9.24"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
     id("org.jetbrains.intellij") version "1.17.0"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
