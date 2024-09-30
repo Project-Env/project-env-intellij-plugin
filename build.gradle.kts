@@ -53,7 +53,7 @@ dependencies {
 
     testImplementation("org.assertj:assertj-core:3.26.0")
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
 }
 
 // Configure gradle-intellij-plugin plugin.
