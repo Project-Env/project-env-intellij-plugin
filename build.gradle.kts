@@ -7,7 +7,7 @@ plugins {
     // Java support
     id("java")
     // JaCoCo report support
-    id("org.jetbrains.kotlinx.kover") version "0.7.6"
+    id("org.jetbrains.kotlinx.kover") version "0.8.3"
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "2.0.0"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
