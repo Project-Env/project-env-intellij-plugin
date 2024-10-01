@@ -62,6 +62,7 @@ dependencies {
 
 // Configure intellij-platform-gradle-plugin.
 intellijPlatform {
+    projectName = properties("pluginName")
     buildSearchableOptions = false
     pluginConfiguration {
         name = properties("pluginName")
