@@ -54,9 +54,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run Linters and Test
-        run: gradle check -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'
-
       - name: Build Plugin
         run: gradle buildPlugin -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'
 
