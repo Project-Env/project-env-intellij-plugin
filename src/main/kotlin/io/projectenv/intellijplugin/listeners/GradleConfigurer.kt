@@ -4,13 +4,12 @@ import com.intellij.openapi.application.WriteAction
 import com.intellij.openapi.externalSystem.service.execution.ExternalSystemJdkUtil
 import com.intellij.openapi.project.Project
 import io.projectenv.intellijplugin.toolinfo.ToolInfos
-import org.jetbrains.plugins.gradle.config.GradleSettingsListenerAdapter
 import org.jetbrains.plugins.gradle.settings.DistributionType
 import org.jetbrains.plugins.gradle.settings.GradleProjectSettings
 import org.jetbrains.plugins.gradle.settings.GradleSettings
 import org.jetbrains.plugins.gradle.settings.GradleSettingsListener
 
-class GradleConfigurer(val project: Project) : ProjectEnvToolsListener, GradleSettingsListenerAdapter() {
+class GradleConfigurer(val project: Project) : ProjectEnvToolsListener, GradleSettingsListener {
 
     private var toolInfos: ToolInfos? = null
 

@@ -5,6 +5,7 @@ import com.intellij.openapi.project.Project
 import io.projectenv.intellijplugin.toolinfo.ToolInfos
 import org.jetbrains.idea.maven.execution.MavenRunner
 import org.jetbrains.idea.maven.execution.MavenRunnerSettings
+import org.jetbrains.idea.maven.project.MavenInSpecificPath
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 
 class MavenConfigurer(val project: Project) : ProjectEnvToolsListener {
@@ -14,7 +15,7 @@ class MavenConfigurer(val project: Project) : ProjectEnvToolsListener {
 
         WriteAction.runAndWait<Throwable> {
             val settings = MavenProjectsManager.getInstance(project)
-            settings.generalSettings.mavenHome = mavenInfo.toolBinariesRoot.get().canonicalPath
+            settings.generalSettings.mavenHomeType = MavenInSpecificPath(mavenInfo.toolBinariesRoot.get().canonicalPath)
 
             val userSettingsFile = mavenInfo.unhandledProjectResources["userSettingsFile"]
             if (userSettingsFile != null) {

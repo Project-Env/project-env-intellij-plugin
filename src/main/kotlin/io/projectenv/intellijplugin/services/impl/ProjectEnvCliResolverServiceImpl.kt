@@ -29,7 +29,7 @@ class ProjectEnvCliResolverServiceImpl : ProjectEnvCliResolverService {
 
     private fun getKnownExecutableLocations(): List<File> {
         return if (!SystemUtils.IS_OS_WINDOWS) {
-            Collections.singletonList(File("/usr/local/bin"))
+            listOf(File("/usr/local/bin"), File("/opt/homebrew/Caskroom"))
         } else {
             Collections.emptyList()
         }

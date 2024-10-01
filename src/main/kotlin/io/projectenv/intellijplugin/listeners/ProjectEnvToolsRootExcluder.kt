@@ -1,6 +1,5 @@
 package io.projectenv.intellijplugin.listeners
 
-import com.intellij.ProjectTopics
 import com.intellij.ide.projectView.actions.MarkRootActionBase
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleManager
@@ -18,7 +17,7 @@ class ProjectEnvToolsRootExcluder(val project: Project) : ProjectEnvToolsListene
 
     init {
         project.messageBus.connect().subscribe(
-            ProjectTopics.MODULES,
+            ModuleListener.TOPIC,
             object : ModuleListener {
                 override fun modulesAdded(project: Project, modules: List<Module>) {
                     for (module in modules) {

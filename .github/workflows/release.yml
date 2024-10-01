@@ -20,12 +20,6 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
 
-      - name: Setup Plugin Verifier IDEs Cache
-        uses: actions/cache@v4.0.2
-        with:
-          path: ~/.pluginVerifier/ides
-          key: ${{ runner.os }}-plugin-verifier-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
       - uses: Project-Env/project-env-github-action@v1.5.0
 
       - run: |
@@ -63,14 +57,8 @@ jobs:
       - name: Run Linters and Test
         run: gradle check -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'
 
-      - name: Verify Plugin Completeness
-        run: gradle verifyPlugin -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'
-
       - name: Build Plugin
         run: gradle buildPlugin -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'
-
-      - name: Verify Binary Compatibility
-        run: gradle runPluginVerifier -Pplugin.verifier.home.dir=~/.pluginVerifier -PpluginVersion=${{ steps.revision.outputs.revision }} -PpluginChangelogHtml='${{ steps.changelog.outputs.html }}'
 
       - name: Upload Release Asset
         id: upload-release-asset

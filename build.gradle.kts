@@ -1,4 +1,7 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
@@ -10,8 +13,8 @@ plugins {
     id("org.jetbrains.kotlinx.kover") version "0.8.3"
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "2.0.20"
-    // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "1.17.4"
+    // intellij-platform-gradle-plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
+    id("org.jetbrains.intellij.platform") version "2.1.0"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "2.2.1"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
@@ -27,10 +30,8 @@ version = properties("pluginVersion")
 repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-        name = "projectEnvCommonsJava"
-        url = uri("https://maven.pkg.github.com/Project-Env/project-env-commons-java")
-        credentials(PasswordCredentials::class)
+    intellijPlatform {
+        defaultRepositories()
     }
     maven {
         name = "projectEnvCli"
@@ -40,36 +41,49 @@ repositories {
 }
 
 dependencies {
-    val projectEnvCliVersion = "3.16.0"
-    implementation("io.projectenv.core:cli:$projectEnvCliVersion")
+    intellijPlatform {
+        create(properties("platformType"), properties("platformVersion"))
+        bundledPlugins(properties("platformBundledPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
+        instrumentationTools()
+        testFramework(TestFrameworkType.Platform)
+    }
 
-    val projectEnvCommonsVersion = "1.2.1"
-    implementation("io.projectenv.commons:process:$projectEnvCommonsVersion")
-    implementation("io.projectenv.commons:gson:$projectEnvCommonsVersion")
-    testImplementation("io.projectenv.commons:archive:$projectEnvCommonsVersion")
-    testImplementation("io.projectenv.commons:string-substitutor:$projectEnvCommonsVersion")
+    val projectEnvCliVersion = "3.19.0"
+    implementation("io.projectenv.core:cli:$projectEnvCliVersion")
 
     implementation("io.sentry:sentry:7.14.0")
 
+    testImplementation("org.opentest4j:opentest4j:1.3.0")
+    testImplementation("junit:junit:4.13.2")
     testImplementation("org.assertj:assertj-core:3.26.3")
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
 }
 
-// Configure gradle-intellij-plugin plugin.
-// Read more: https://github.com/JetBrains/gradle-intellij-plugin
-intellij {
-    pluginName.set(properties("pluginName"))
-    version.set(properties("platformVersion"))
-    type.set(properties("platformType"))
-    downloadSources.set(properties("platformDownloadSources").toBoolean())
-    updateSinceUntilBuild.set(true)
+// Configure intellij-platform-gradle-plugin.
+intellijPlatform {
+    buildSearchableOptions = false
+    pluginConfiguration {
+        name = properties("pluginName")
+        version = properties("pluginVersion")
+        description = projectDir.resolve("README.md").readText().lines().run {
+            val start = "<!-- Plugin description -->"
+            val end = "<!-- Plugin description end -->"
 
-    // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-    plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
+            if (!containsAll(listOf(start, end))) {
+                throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
+            }
+            subList(indexOf(start) + 1, indexOf(end))
+        }.joinToString("\n").run { markdownToHTML(this) }
+        changeNotes = properties("pluginChangelogHtml")
+    }
+    publishing {
+        token = System.getenv("PUBLISH_TOKEN")
+        channels = listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.')[0])
+    }
 }
 
-sonarqube {
+sonar {
     properties {
         property("sonar.projectName", "project-env-intellij-plugin")
         property("sonar.projectKey", "Project-Env_project-env-intellij-plugin")
@@ -87,44 +101,13 @@ tasks {
             targetCompatibility = it
         }
         withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = it
+            compilerOptions.jvmTarget.set(JvmTarget.fromTarget(it))
         }
     }
 
-    buildSearchableOptions {
-        enabled = false
-    }
-
-    patchPluginXml {
-        version.set(properties("pluginVersion"))
-        sinceBuild.set(properties("pluginSinceBuild"))
-        untilBuild.set("")
-
-        // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-        pluginDescription.set(
-            projectDir.resolve("README.md").readText().lines().run {
-                val start = "<!-- Plugin description -->"
-                val end = "<!-- Plugin description end -->"
-
-                if (!containsAll(listOf(start, end))) {
-                    throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
-                }
-                subList(indexOf(start) + 1, indexOf(end))
-            }.joinToString("\n").run { markdownToHTML(this) }
-        )
-
-        changeNotes.set(properties("pluginChangelogHtml"))
-    }
-
-    runPluginVerifier {
-        ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
-    }
-
-    publishPlugin {
-        token.set(System.getenv("PUBLISH_TOKEN"))
-        // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
-        // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
-        // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
-        channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.')[0]))
+    test {
+        testLogging {
+            exceptionFormat = TestExceptionFormat.FULL
+        }
     }
 }
