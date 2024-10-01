@@ -13,7 +13,6 @@ import io.sentry.SentryLevel
 import io.sentry.UserFeedback
 import io.sentry.protocol.Message
 import io.sentry.protocol.SentryId
-import org.apache.commons.lang.StringUtils
 import java.awt.Component
 
 class SentryErrorReportSubmitter : ErrorReportSubmitter() {
@@ -95,7 +94,7 @@ class SentryErrorReportSubmitter : ErrorReportSubmitter() {
     }
 
     private fun captureUserFeedback(sentryEventId: SentryId, additionalInfo: String?) {
-        if (StringUtils.isNotEmpty(additionalInfo)) {
+        if (additionalInfo != null) {
             val sentryUserFeedback = UserFeedback(sentryEventId)
             sentryUserFeedback.comments = additionalInfo
 

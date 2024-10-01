@@ -76,13 +76,13 @@ class ProjectEnvServiceImplTest : AbstractProjectEnvTest() {
     }
 
     private fun assertMavenSettings() {
-        assertToolPath(MavenProjectsManager.getInstance(project).generalSettings.mavenHome)
+        assertToolPath(MavenProjectsManager.getInstance(project).generalSettings.mavenHomeType.title)
     }
 
     private fun assertJdkSettings() {
         val jdk = ProjectRootManager.getInstance(project).projectSdk as ProjectJdkImpl
         assertToolPath(jdk.homePath)
-        assertThat(jdk.getUrls(OrderRootType.CLASSES)).hasSize(77)
+        assertThat(jdk.sdkModificator.getUrls(OrderRootType.CLASSES)).hasSize(83)
         assertThat(MavenProjectsManager.getInstance(project).importingSettings.jdkForImporter)
             .isEqualTo(MavenRunnerSettings.USE_PROJECT_JDK)
     }

@@ -114,7 +114,11 @@ class SentryErrorReportSubmitterIT : BasePlatformTestCase() {
             }
 
             val component = mock(Component::class.java)
-            SentryErrorReportSubmitter().submit(arrayOf(LogMessage.createEvent(throwable, message)), "test comment", component) {
+            SentryErrorReportSubmitter().submit(
+                arrayOf(LogMessage.eventOf(throwable, message, emptyList())),
+                "test comment",
+                component
+            ) {
                 assertThat(it.status).isEqualTo(SubmittedReportInfo.SubmissionStatus.NEW_ISSUE)
             }
         }

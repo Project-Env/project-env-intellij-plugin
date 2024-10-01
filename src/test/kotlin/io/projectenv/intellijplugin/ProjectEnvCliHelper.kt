@@ -1,9 +1,7 @@
 package io.projectenv.intellijplugin
 
 import io.projectenv.core.commons.archive.ArchiveExtractorFactory
-import io.projectenv.core.commons.download.DownloadUrlSubstitutorFactory
-import io.projectenv.core.commons.download.ImmutableDownloadUrlDictionary
-import io.projectenv.core.commons.system.CPUArchitecture
+import io.projectenv.core.commons.system.CpuArchitecture
 import io.projectenv.core.commons.system.OperatingSystem
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
@@ -28,35 +26,33 @@ object ProjectEnvCliHelper {
     }
 
     private fun getProjectEnvCliDownloadUrl(version: String): String {
-        val dictionary = ImmutableDownloadUrlDictionary.builder()
-            .putParameters("VERSION", version)
-            .putOperatingSystemSpecificParameters(
-                "OS",
-                mapOf(
-                    OperatingSystem.MACOS to "macos",
-                    OperatingSystem.LINUX to "linux",
-                    OperatingSystem.WINDOWS to "windows"
-                )
-            )
-            .putOperatingSystemSpecificParameters(
-                "FILE_EXT",
-                mapOf(
-                    OperatingSystem.MACOS to "tar.gz",
-                    OperatingSystem.LINUX to "tar.gz",
-                    OperatingSystem.WINDOWS to "zip"
-                )
-            )
-            .putCPUArchitectureSpecificParameters(
-                "CPU_ARCH",
-                mapOf(
-                    CPUArchitecture.X64 to "amd64"
-                )
-            )
-            .build()
+        return "https://github.com/Project-Env/project-env-core/releases/download/v$version/cli-$version-${getOsDownloadUrlName()}-${getCpuArchDownloadUrlName()}.${getFileExtDownloadUrlName()}"
+    }
 
-        return DownloadUrlSubstitutorFactory
-            .createDownloadUrlVariableSubstitutor(dictionary)
-            .replace("https://github.com/Project-Env/project-env-core/releases/download/v\${VERSION}/cli-\${VERSION}-\${OS}-\${CPU_ARCH}.\${FILE_EXT}")
+    private fun getOsDownloadUrlName(): String {
+        return if (OperatingSystem.getCurrentOperatingSystem() == OperatingSystem.WINDOWS) {
+            "windows"
+        } else if (OperatingSystem.getCurrentOperatingSystem() == OperatingSystem.MACOS) {
+            "macos"
+        } else {
+            "linux"
+        }
+    }
+
+    private fun getCpuArchDownloadUrlName(): String {
+        return if (CpuArchitecture.getCurrentCpuArchitecture() == CpuArchitecture.AMD64) {
+            "amd64"
+        } else {
+            "aarch64"
+        }
+    }
+
+    private fun getFileExtDownloadUrlName(): String {
+        return if (OperatingSystem.getCurrentOperatingSystem() == OperatingSystem.WINDOWS) {
+            "zip"
+        } else {
+            "tar.gz"
+        }
     }
 
     private fun getTempArchiveFile(tempDirectory: File, downloadUrl: String): File {

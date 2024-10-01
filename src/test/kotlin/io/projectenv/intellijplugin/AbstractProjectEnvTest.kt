@@ -59,6 +59,9 @@ abstract class AbstractProjectEnvTest : HeavyPlatformTestCase() {
         val jdk = ProjectRootManager.getInstance(project).projectSdk
         if (jdk != null) {
             ApplicationManager.getApplication().runWriteAction {
+                ProjectRootManager.getInstance(project).projectSdk = null
+            }
+            ApplicationManager.getApplication().runWriteAction {
                 ProjectJdkTable.getInstance().removeJdk(jdk)
             }
         }
