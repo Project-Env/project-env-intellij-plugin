@@ -29,11 +29,26 @@ jobs:
           echo "ORG_GRADLE_PROJECT_projectEnvCommonsJavaUsername=${{ github.actor }}" >> $GITHUB_ENV
           echo "ORG_GRADLE_PROJECT_projectEnvCommonsJavaPassword=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
 
+      - name: Export Artifact Name
+        id: artifact
+        run: |
+          PROPERTIES="$(gradle properties --console=plain -q)"
+          NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
+          ARTIFACT="${NAME}-dev.zip"
+          echo "artifact=$ARTIFACT" >> $GITHUB_OUTPUT
+
       - name: Run Linters and Test
         run: gradle check koverXmlReport
 
       - name: Build Plugin
         run: gradle buildPlugin
+
+      - name: Upload Plugin
+        uses: actions/upload-artifact@v4
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        with:
+          name: ${{ steps.artifact.outputs.artifact }}
+          path: ./build/distributions/${{ steps.artifact.outputs.artifact }}
 
       - name: Sonar
         if: ${{ github.actor != 'dependabot[bot]' }}
