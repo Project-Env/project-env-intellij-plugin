@@ -51,7 +51,7 @@ dependencies {
     val projectEnvCliVersion = "3.19.0"
     implementation("io.projectenv.core:cli:$projectEnvCliVersion")
 
-    implementation("io.sentry:sentry:7.17.0")
+    implementation("io.sentry:sentry:7.18.0")
 
     testImplementation("org.opentest4j:opentest4j:1.3.0")
     testImplementation("junit:junit:4.13.2")
