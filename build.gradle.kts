@@ -14,7 +14,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "2.1.0"
     // intellij-platform-gradle-plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
-    id("org.jetbrains.intellij.platform") version "2.1.0"
+    id("org.jetbrains.intellij.platform") version "2.2.0"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "2.2.1"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
