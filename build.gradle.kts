@@ -9,8 +9,6 @@ fun properties(key: String) = project.findProperty(key).toString()
 plugins {
     // Java support
     id("java")
-    // JaCoCo report support
-    id("org.jetbrains.kotlinx.kover") version "0.9.0"
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "2.1.0"
     // intellij-platform-gradle-plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
@@ -19,8 +17,6 @@ plugins {
     id("org.jetbrains.changelog") version "2.2.1"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
     id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
-    // Sonar support
-    id("org.sonarqube") version "6.0.1.5171"
 }
 
 group = properties("pluginGroup")
@@ -84,17 +80,6 @@ intellijPlatform {
     publishing {
         token = System.getenv("PUBLISH_TOKEN")
         channels = listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.')[0])
-    }
-}
-
-sonar {
-    properties {
-        property("sonar.projectName", "project-env-intellij-plugin")
-        property("sonar.projectKey", "Project-Env_project-env-intellij-plugin")
-        property("sonar.organization", "project-env")
-        property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.coverage.exclusions", "**/*Exception.kt")
-        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/kover/report.xml")
     }
 }
 
