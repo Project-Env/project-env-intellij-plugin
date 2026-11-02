@@ -38,7 +38,7 @@ jobs:
           echo "artifact=$ARTIFACT" >> $GITHUB_OUTPUT
 
       - name: Run Linters and Test
-        run: gradle check koverXmlReport
+        run: gradle check
 
       - name: Build Plugin
         run: gradle buildPlugin
@@ -49,10 +49,3 @@ jobs:
         with:
           name: ${{ steps.artifact.outputs.artifact }}
           path: ./build/distributions/${{ steps.artifact.outputs.artifact }}
-
-      - name: Sonar
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        run: gradle sonar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
